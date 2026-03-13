@@ -172,6 +172,31 @@ const AdminSystem = () => {
             </table>
           </div>
         </div>
+
+        {/* General System Settings */}
+        <div className="bg-card border border-border rounded-xl p-6">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+              <Settings className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-base font-semibold text-foreground">General System Settings</p>
+              <p className="text-sm text-muted-foreground">Configure system-wide preferences</p>
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            {systemSettings.map((setting) => (
+              <div key={setting.name} className="flex items-center justify-between bg-secondary/20 border border-border rounded-lg px-5 py-4">
+                <div>
+                  <p className="text-sm font-medium text-foreground">{setting.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{setting.desc}</p>
+                </div>
+                <Switch defaultChecked={setting.defaultOn} />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </AdminLayout>
   );
