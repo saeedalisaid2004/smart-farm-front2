@@ -1,6 +1,7 @@
 import AdminLayout from "@/components/admin/AdminLayout";
-import { Monitor, Database, Brain, Power, CheckCircle, Globe } from "lucide-react";
+import { Monitor, Database, Brain, Power, CheckCircle, Globe, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 
 const services = [
   { name: "Plant Disease Detection", uptime: "99.9%" },
