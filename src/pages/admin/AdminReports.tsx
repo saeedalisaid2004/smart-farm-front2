@@ -1,5 +1,7 @@
 import AdminLayout from "@/components/admin/AdminLayout";
-import { TrendingUp, Users, Globe, Activity, Filter } from "lucide-react";
+import { TrendingUp, Users, Globe, Activity, Filter, FileText, Calendar, Download } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line,
@@ -15,6 +17,21 @@ const usageData = [
   { service: "Soil Analysis", value: 160 },
   { service: "Fruit Quality", value: 140 },
   { service: "Chatbot", value: 310 },
+];
+
+const dailyData = [
+  { day: "Jun 1", activity: 240 },
+  { day: "Jun 2", activity: 265 },
+  { day: "Jun 3", activity: 250 },
+  { day: "Jun 4", activity: 300 },
+  { day: "Jun 5", activity: 270 },
+  { day: "Jun 6", activity: 210 },
+  { day: "Jun 7", activity: 180 },
+];
+
+const generatedReports = [
+  { name: "Monthly Usage Report", date: "Jun 1, 2024", tag: "Usage", size: "2.4 MB" },
+  { name: "User Activity Analysis", date: "Jun 1, 2024", tag: "Users", size: "1.8 MB" },
 ];
 
 const growthData = [
@@ -124,6 +141,70 @@ const AdminReports = () => {
                 <Line type="monotone" dataKey="users" stroke="hsl(142, 71%, 45%)" strokeWidth={2} dot={{ fill: "hsl(142, 71%, 45%)", r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Daily Activity */}
+        <div className="bg-card border border-border rounded-xl p-6">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
+              <TrendingUp className="w-4 h-4 text-green-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Daily Activity</h3>
+              <p className="text-sm text-muted-foreground">Platform activity over the past week</p>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" fontSize={11} />
+              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} />
+              <Tooltip />
+              <Line type="monotone" dataKey="activity" stroke="hsl(142, 71%, 45%)" strokeWidth={2} dot={{ fill: "hsl(142, 71%, 45%)", r: 4 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Generated Reports */}
+        <div className="bg-card border border-border rounded-xl p-6">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-2">
+              <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
+                <FileText className="w-4 h-4 text-green-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground">Generated Reports</h3>
+                <p className="text-sm text-muted-foreground">Download historical reports</p>
+              </div>
+            </div>
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-5">
+              Generate New Report
+            </Button>
+          </div>
+
+          <div className="space-y-3">
+            {generatedReports.map((report) => (
+              <div key={report.name} className="border border-border rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center">
+                    <FileText className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{report.name}</p>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                      <Calendar className="w-3 h-3" />
+                      <span>{report.date}</span>
+                      <Badge variant="secondary" className="text-xs px-1.5 py-0">{report.tag}</Badge>
+                      <span>{report.size}</span>
+                    </div>
+                  </div>
+                </div>
+                <button className="w-full flex items-center justify-center gap-2 bg-secondary/50 hover:bg-secondary text-sm text-muted-foreground py-2.5 rounded-lg transition-colors">
+                  <Download className="w-4 h-4" /> Download
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </div>
