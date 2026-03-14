@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Settings, User, Palette, Globe, Bell } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useState, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -15,6 +16,19 @@ import {
 
 const AdminSettings = () => {
   const { toast } = useToast();
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "light";
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   const handleSave = () => {
     toast({ title: "Settings saved", description: "Your profile has been updated." });
