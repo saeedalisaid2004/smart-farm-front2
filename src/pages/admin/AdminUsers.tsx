@@ -1,8 +1,10 @@
 import AdminLayout from "@/components/admin/AdminLayout";
-import { Users, UserCheck, UserX, Shield, Search, MoreVertical, Mail } from "lucide-react";
+import { Users, UserCheck, UserX, Shield, Search, MoreVertical, Mail, Eye, UserMinus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { toast } from "@/hooks/use-toast";
 
 const statsCards = [
   { icon: Users, label: "Total Users", value: "1,247", iconColor: "text-primary", iconBg: "bg-primary/10" },
