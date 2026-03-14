@@ -77,6 +77,47 @@ const AdminSettings = () => {
             </label>
           </div>
         </div>
+
+        {/* Language Selection */}
+        <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
+              <Globe className="w-4 h-4 text-green-600" />
+            </div>
+            <h3 className="font-semibold text-foreground">Language Selection</h3>
+          </div>
+          <Select defaultValue="en">
+            <SelectTrigger className="h-11 rounded-lg">
+              <SelectValue placeholder="Select language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="ar">العربية</SelectItem>
+              <SelectItem value="fr">Français</SelectItem>
+              <SelectItem value="es">Español</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Notification Preferences */}
+        <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
+              <Bell className="w-4 h-4 text-green-600" />
+            </div>
+            <h3 className="font-semibold text-foreground">Notification Preferences</h3>
+          </div>
+          <div className="space-y-2">
+            <label className="flex items-center justify-between border border-border rounded-lg px-4 py-3 cursor-pointer hover:bg-secondary/30 transition-colors">
+              <span className="text-sm font-medium text-foreground">Push Notifications</span>
+              <Checkbox defaultChecked className="h-5 w-5" />
+            </label>
+            <label className="flex items-center justify-between border border-border rounded-lg px-4 py-3 cursor-pointer hover:bg-secondary/30 transition-colors">
+              <span className="text-sm font-medium text-foreground">Email Alerts</span>
+              <Checkbox defaultChecked className="h-5 w-5" />
+            </label>
+          </div>
+        </div>
       </div>
     </AdminLayout>
   );
