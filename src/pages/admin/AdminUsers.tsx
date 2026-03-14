@@ -1,8 +1,10 @@
 import AdminLayout from "@/components/admin/AdminLayout";
-import { Users, UserCheck, UserX, Shield, Search, MoreVertical, Mail } from "lucide-react";
+import { Users, UserCheck, UserX, Shield, Search, MoreVertical, Mail, Eye, UserMinus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { toast } from "@/hooks/use-toast";
 
 const statsCards = [
   { icon: Users, label: "Total Users", value: "1,247", iconColor: "text-primary", iconBg: "bg-primary/10" },
@@ -114,9 +116,36 @@ const AdminUsers = () => {
                   </td>
                   <td className="px-6 py-4 text-sm text-muted-foreground">{user.joined}</td>
                   <td className="px-6 py-4">
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <MoreVertical className="w-4 h-4" />
-                    </Button>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent align="end" className="w-48 p-1">
+                        <button
+                          onClick={() => toast({ title: "View Profile", description: `Viewing ${user.name}'s profile` })}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground rounded-md hover:bg-secondary transition-colors"
+                        >
+                          <Eye className="w-4 h-4 text-muted-foreground" />
+                          View Profile
+                        </button>
+                        <button
+                          onClick={() => toast({ title: "Deactivate", description: `${user.name} has been deactivated` })}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground rounded-md hover:bg-secondary transition-colors"
+                        >
+                          <UserMinus className="w-4 h-4 text-muted-foreground" />
+                          Deactivate
+                        </button>
+                        <button
+                          onClick={() => toast({ title: "Delete User", description: `${user.name} has been deleted`, variant: "destructive" })}
+                          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-destructive rounded-md hover:bg-destructive/10 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Delete User
+                        </button>
+                      </PopoverContent>
+                    </Popover>
                   </td>
                 </tr>
               ))}
