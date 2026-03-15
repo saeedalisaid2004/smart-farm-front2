@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home, Leaf, Eye, Sprout, FlaskConical, Apple, MessageCircle, FileText, Settings, Bell, Moon, Sun,
@@ -6,30 +6,23 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const menuItems = [
-  { icon: Home, label: "Welcome", path: "/dashboard" },
-  { icon: Leaf, label: "Plant Disease Detection", path: "/dashboard/plant-disease" },
-  { icon: Eye, label: "Animal Weight Estimation", path: "/dashboard/animal-weight" },
-  { icon: Sprout, label: "Crop Recommendation", path: "/dashboard/crop-recommendation" },
-  { icon: FlaskConical, label: "Soil Type Analysis", path: "/dashboard/soil-analysis" },
-  { icon: Apple, label: "Fruit Quality Analysis", path: "/dashboard/fruit-quality" },
-  { icon: MessageCircle, label: "Smart Farm Chatbot", path: "/dashboard/chatbot" },
-  { icon: FileText, label: "Reports", path: "/dashboard/reports" },
-  { icon: Settings, label: "Settings", path: "/dashboard/settings" },
+  { icon: Home, labelKey: "dashboard.welcome" as const, path: "/dashboard" },
+  { icon: Leaf, labelKey: "dashboard.plantDisease" as const, path: "/dashboard/plant-disease" },
+  { icon: Eye, labelKey: "dashboard.animalWeight" as const, path: "/dashboard/animal-weight" },
+  { icon: Sprout, labelKey: "dashboard.cropRecommendation" as const, path: "/dashboard/crop-recommendation" },
+  { icon: FlaskConical, labelKey: "dashboard.soilAnalysis" as const, path: "/dashboard/soil-analysis" },
+  { icon: Apple, labelKey: "dashboard.fruitQuality" as const, path: "/dashboard/fruit-quality" },
+  { icon: MessageCircle, labelKey: "dashboard.chatbot" as const, path: "/dashboard/chatbot" },
+  { icon: FileText, labelKey: "dashboard.reports" as const, path: "/dashboard/reports" },
+  { icon: Settings, labelKey: "dashboard.settings" as const, path: "/dashboard/settings" },
 ];
 
 interface DashboardLayoutProps {
@@ -48,6 +41,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { t, isRTL } = useLanguage();
 
   const toggleTheme = () => {
     document.documentElement.classList.toggle("dark");
@@ -61,14 +55,14 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   const userName = user?.user_metadata?.full_name || "John Farmer";
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className={cn("min-h-screen bg-background flex", isRTL && "flex-row-reverse")}>
       {/* Sidebar */}
-      <aside className="h-screen w-64 bg-card border-r border-border flex flex-col sticky top-0">
-        <div className="p-5 flex items-center gap-3">
+      <aside className={cn("h-screen w-64 bg-card border-border flex flex-col sticky top-0", isRTL ? "border-l" : "border-r")}>
+        <div className={cn("p-5 flex items-center gap-3", isRTL && "flex-row-reverse")}>
           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
             <Leaf className="w-5 h-5 text-primary-foreground" />
           </div>
-          <span className="text-lg font-semibold text-foreground">Smart Farm AI</span>
+          <span className="text-lg font-semibold text-foreground">{t("app.name")}</span>
         </div>
 
         <nav className="flex-1 px-3 py-2">
@@ -81,13 +75,14 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
                     to={item.path}
                     className={cn(
                       "flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all duration-200",
+                      isRTL && "flex-row-reverse text-right",
                       isActive
                         ? "bg-primary text-primary-foreground font-medium"
                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                     )}
                   >
                     <item.icon className="w-5 h-5 shrink-0" />
-                    <span>{item.label}</span>
+                    <span>{t(item.labelKey)}</span>
                   </Link>
                 </li>
               );
@@ -98,12 +93,10 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
 
       {/* Main */}
       <div className="flex-1 flex flex-col">
-        {/* Top Header */}
-        <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6 sticky top-0 z-10">
+        <header className={cn("h-16 bg-card border-b border-border flex items-center justify-between px-6 sticky top-0 z-10", isRTL && "flex-row-reverse")}>
           <div className="flex-1" />
           <h2 className="text-lg font-medium text-foreground">{title}</h2>
-          <div className="flex-1 flex items-center justify-end gap-4">
-            {/* Notifications */}
+          <div className={cn("flex-1 flex items-center gap-4", isRTL ? "justify-start flex-row-reverse" : "justify-end")}>
             <Popover>
               <PopoverTrigger asChild>
                 <button className="relative text-muted-foreground hover:text-foreground transition-colors">
@@ -113,7 +106,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               </PopoverTrigger>
               <PopoverContent className="w-96 p-0" align="end">
                 <div className="flex items-center justify-between p-4 border-b border-border">
-                  <h3 className="font-semibold text-foreground">Notifications</h3>
+                  <h3 className="font-semibold text-foreground">{t("header.notifications")}</h3>
                   <span className="text-xs bg-destructive text-destructive-foreground px-2 py-0.5 rounded-full font-medium">3 new</span>
                 </div>
                 <div className="max-h-80 overflow-y-auto">
@@ -134,55 +127,43 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               </PopoverContent>
             </Popover>
 
-            <button
-              onClick={toggleTheme}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <button onClick={toggleTheme} className="text-muted-foreground hover:text-foreground transition-colors">
               <Moon className="w-5 h-5 dark:hidden" />
               <Sun className="w-5 h-5 hidden dark:block" />
             </button>
 
-            {/* User Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2 cursor-pointer">
+                <button className={cn("flex items-center gap-2 cursor-pointer", isRTL && "flex-row-reverse")}>
                   <div className="w-9 h-9 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center relative">
-                    <span className="text-primary text-sm font-semibold">
-                      {userName.charAt(0).toUpperCase()}
-                    </span>
+                    <span className="text-primary text-sm font-semibold">{userName.charAt(0).toUpperCase()}</span>
                     <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
                   </div>
-                  <div className="text-right">
+                  <div className={isRTL ? "text-left" : "text-right"}>
                     <p className="text-sm font-medium text-foreground leading-tight">{userName}</p>
-                    <p className="text-xs text-muted-foreground leading-tight">Farmer</p>
+                    <p className="text-xs text-muted-foreground leading-tight">{t("common.farmer")}</p>
                   </div>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("header.myAccount")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate("/dashboard/profile")} className="cursor-pointer">
-                  <User className="w-4 h-4 mr-2" />
-                  Profile
+                  <User className="w-4 h-4 mr-2" /> {t("header.profile")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate("/dashboard/settings")} className="cursor-pointer">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
+                  <Settings className="w-4 h-4 mr-2" /> {t("dashboard.settings")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
+                  <LogOut className="w-4 h-4 mr-2" /> {t("header.logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </header>
 
-        {/* Content */}
-        <main className="flex-1 p-8">
-          {children}
-        </main>
+        <main className="flex-1 p-8">{children}</main>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Settings, User, Palette, Globe, Bell } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Select,
   SelectContent,
@@ -16,6 +17,7 @@ import {
 
 const AdminSettings = () => {
   const { toast } = useToast();
+  const { t, language, setLanguage } = useLanguage();
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "light";
   });
@@ -31,17 +33,17 @@ const AdminSettings = () => {
   }, [theme]);
 
   const handleSave = () => {
-    toast({ title: "Settings saved", description: "Your profile has been updated." });
+    toast({ title: t("settings.settingsSaved"), description: t("settings.profileUpdatedDesc") });
   };
 
   return (
-    <AdminLayout title="Settings">
+    <AdminLayout title={t("settings.title")}>
       <div className="space-y-6 max-w-2xl">
         <div className="flex items-center gap-2">
           <Settings className="w-5 h-5 text-primary" />
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Settings</h1>
-            <p className="text-muted-foreground">Manage your account and application preferences</p>
+            <h1 className="text-2xl font-bold text-foreground">{t("settings.title")}</h1>
+            <p className="text-muted-foreground">{t("settings.subtitle")}</p>
           </div>
         </div>
 
@@ -51,23 +53,23 @@ const AdminSettings = () => {
             <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
               <User className="w-4 h-4 text-green-600" />
             </div>
-            <h3 className="font-semibold text-foreground">Profile Settings</h3>
+            <h3 className="font-semibold text-foreground">{t("settings.profile")}</h3>
           </div>
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium text-foreground">Full Name</Label>
+              <Label className="text-sm font-medium text-foreground">{t("settings.fullName")}</Label>
               <Input defaultValue="Farm Owner" className="h-11 rounded-lg" />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium text-foreground">Email</Label>
+              <Label className="text-sm font-medium text-foreground">{t("settings.email")}</Label>
               <Input defaultValue="owner@smartfarm.com" className="h-11 rounded-lg" />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium text-foreground">Phone Number</Label>
+              <Label className="text-sm font-medium text-foreground">{t("settings.phone")}</Label>
               <Input defaultValue="+1234567890" className="h-11 rounded-lg" />
             </div>
             <Button onClick={handleSave} className="w-full h-11 rounded-lg text-sm font-medium">
-              Save Profile
+              {t("settings.saveProfile")}
             </Button>
           </div>
         </div>
@@ -78,16 +80,16 @@ const AdminSettings = () => {
             <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
               <Palette className="w-4 h-4 text-green-600" />
             </div>
-            <h3 className="font-semibold text-foreground">Theme Preference</h3>
+            <h3 className="font-semibold text-foreground">{t("settings.theme")}</h3>
           </div>
           <div className="space-y-2">
             <label className="flex items-center gap-3 border border-border rounded-lg px-4 py-3 cursor-pointer hover:bg-secondary/30 transition-colors">
               <input type="radio" name="theme" value="light" checked={theme === "light"} onChange={() => setTheme("light")} className="w-4 h-4 accent-primary" />
-              <span className="text-sm font-medium text-foreground">Light Mode</span>
+              <span className="text-sm font-medium text-foreground">{t("settings.lightMode")}</span>
             </label>
             <label className="flex items-center gap-3 border border-border rounded-lg px-4 py-3 cursor-pointer hover:bg-secondary/30 transition-colors">
               <input type="radio" name="theme" value="dark" checked={theme === "dark"} onChange={() => setTheme("dark")} className="w-4 h-4 accent-primary" />
-              <span className="text-sm font-medium text-foreground">Dark Mode</span>
+              <span className="text-sm font-medium text-foreground">{t("settings.darkMode")}</span>
             </label>
           </div>
         </div>
@@ -98,17 +100,15 @@ const AdminSettings = () => {
             <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
               <Globe className="w-4 h-4 text-green-600" />
             </div>
-            <h3 className="font-semibold text-foreground">Language Selection</h3>
+            <h3 className="font-semibold text-foreground">{t("settings.language")}</h3>
           </div>
-          <Select defaultValue="en">
+          <Select value={language} onValueChange={(val) => setLanguage(val as "en" | "ar")}>
             <SelectTrigger className="h-11 rounded-lg">
-              <SelectValue placeholder="Select language" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="en">English</SelectItem>
               <SelectItem value="ar">العربية</SelectItem>
-              <SelectItem value="fr">Français</SelectItem>
-              <SelectItem value="es">Español</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -119,15 +119,15 @@ const AdminSettings = () => {
             <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
               <Bell className="w-4 h-4 text-green-600" />
             </div>
-            <h3 className="font-semibold text-foreground">Notification Preferences</h3>
+            <h3 className="font-semibold text-foreground">{t("settings.notifications")}</h3>
           </div>
           <div className="space-y-2">
             <label className="flex items-center justify-between border border-border rounded-lg px-4 py-3 cursor-pointer hover:bg-secondary/30 transition-colors">
-              <span className="text-sm font-medium text-foreground">Push Notifications</span>
+              <span className="text-sm font-medium text-foreground">{t("settings.pushNotifications")}</span>
               <Checkbox defaultChecked className="h-5 w-5" />
             </label>
             <label className="flex items-center justify-between border border-border rounded-lg px-4 py-3 cursor-pointer hover:bg-secondary/30 transition-colors">
-              <span className="text-sm font-medium text-foreground">Email Alerts</span>
+              <span className="text-sm font-medium text-foreground">{t("settings.emailAlerts")}</span>
               <Checkbox defaultChecked className="h-5 w-5" />
             </label>
           </div>

@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Select,
   SelectContent,
@@ -18,6 +19,7 @@ import {
 const DashboardSettings = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t, language, setLanguage } = useLanguage();
   const [fullName, setFullName] = useState(user?.user_metadata?.full_name || "Farm Owner");
   const [email, setEmail] = useState(user?.email || "owner@smartfarm.com");
   const [phone, setPhone] = useState("+1234567890");
@@ -33,11 +35,11 @@ const DashboardSettings = () => {
   };
 
   const handleSave = () => {
-    toast({ title: "Profile updated", description: "Your profile settings have been saved." });
+    toast({ title: t("settings.profileUpdated"), description: t("settings.profileSaved") });
   };
 
   return (
-    <DashboardLayout title="Settings">
+    <DashboardLayout title={t("settings.title")}>
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-3 mb-2">
@@ -45,8 +47,8 @@ const DashboardSettings = () => {
             <Settings className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Settings</h1>
-            <p className="text-sm text-muted-foreground">Manage your account and application preferences</p>
+            <h1 className="text-xl font-semibold text-foreground">{t("settings.title")}</h1>
+            <p className="text-sm text-muted-foreground">{t("settings.subtitle")}</p>
           </div>
         </div>
 
@@ -57,12 +59,12 @@ const DashboardSettings = () => {
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                 <User className="w-5 h-5 text-primary" />
               </div>
-              <h2 className="text-lg font-medium text-foreground">Profile Settings</h2>
+              <h2 className="text-lg font-medium text-foreground">{t("settings.profile")}</h2>
             </div>
 
             <div className="space-y-6">
               <div>
-                <Label className="text-foreground mb-2 block">Full Name</Label>
+                <Label className="text-foreground mb-2 block">{t("settings.fullName")}</Label>
                 <Input
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
@@ -70,7 +72,7 @@ const DashboardSettings = () => {
                 />
               </div>
               <div>
-                <Label className="text-foreground mb-2 block">Email</Label>
+                <Label className="text-foreground mb-2 block">{t("settings.email")}</Label>
                 <Input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -79,7 +81,7 @@ const DashboardSettings = () => {
                 />
               </div>
               <div>
-                <Label className="text-foreground mb-2 block">Phone Number</Label>
+                <Label className="text-foreground mb-2 block">{t("settings.phone")}</Label>
                 <Input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -93,7 +95,7 @@ const DashboardSettings = () => {
               onClick={handleSave}
               className="w-full rounded-xl py-6 text-base font-medium mt-8"
             >
-              Save Profile
+              {t("settings.saveProfile")}
             </Button>
           </div>
 
@@ -103,7 +105,7 @@ const DashboardSettings = () => {
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Palette className="w-5 h-5 text-primary" />
               </div>
-              <h2 className="text-lg font-medium text-foreground">Theme Preference</h2>
+              <h2 className="text-lg font-medium text-foreground">{t("settings.theme")}</h2>
             </div>
             <div className="space-y-3">
               <label
@@ -113,7 +115,7 @@ const DashboardSettings = () => {
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${theme === "light" ? "border-primary" : "border-muted-foreground"}`}>
                   {theme === "light" && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                 </div>
-                <span className="text-foreground">Light Mode</span>
+                <span className="text-foreground">{t("settings.lightMode")}</span>
               </label>
               <label
                 className="flex items-center gap-3 p-4 rounded-xl border border-border cursor-pointer hover:bg-secondary/50 transition-colors"
@@ -122,7 +124,7 @@ const DashboardSettings = () => {
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${theme === "dark" ? "border-primary" : "border-muted-foreground"}`}>
                   {theme === "dark" && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                 </div>
-                <span className="text-foreground">Dark Mode</span>
+                <span className="text-foreground">{t("settings.darkMode")}</span>
               </label>
             </div>
           </div>
@@ -133,9 +135,9 @@ const DashboardSettings = () => {
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Globe className="w-5 h-5 text-primary" />
               </div>
-              <h2 className="text-lg font-medium text-foreground">Language Selection</h2>
+              <h2 className="text-lg font-medium text-foreground">{t("settings.language")}</h2>
             </div>
-            <Select defaultValue="en">
+            <Select value={language} onValueChange={(val) => setLanguage(val as "en" | "ar")}>
               <SelectTrigger className="rounded-full h-11 bg-secondary border-0 px-4">
                 <SelectValue />
               </SelectTrigger>
@@ -152,19 +154,19 @@ const DashboardSettings = () => {
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Bell className="w-5 h-5 text-primary" />
               </div>
-              <h2 className="text-lg font-medium text-foreground">Notification Preferences</h2>
+              <h2 className="text-lg font-medium text-foreground">{t("settings.notifications")}</h2>
             </div>
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 rounded-xl border border-border">
-                <Label className="text-foreground">Email Notifications</Label>
+                <Label className="text-foreground">{t("settings.emailNotifications")}</Label>
                 <Switch />
               </div>
               <div className="flex items-center justify-between p-4 rounded-xl border border-border">
-                <Label className="text-foreground">Analysis Completion Alerts</Label>
+                <Label className="text-foreground">{t("settings.analysisAlerts")}</Label>
                 <Switch defaultChecked />
               </div>
               <div className="flex items-center justify-between p-4 rounded-xl border border-border">
-                <Label className="text-foreground">Weekly Report Summary</Label>
+                <Label className="text-foreground">{t("settings.weeklyReport")}</Label>
                 <Switch defaultChecked />
               </div>
             </div>
