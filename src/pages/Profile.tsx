@@ -49,6 +49,7 @@ const Profile = () => {
 
     await supabase.from("profiles").update({ avatar_url: url }).eq("id", user.id);
     setAvatarUrl(url);
+    window.dispatchEvent(new CustomEvent("avatar-updated", { detail: url }));
     toast({ title: t("profile.photoUpdated") });
     setUploading(false);
   };
