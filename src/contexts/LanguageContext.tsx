@@ -439,6 +439,10 @@ const translations = {
     "profile.location": "الموقع",
     "profile.locationValue": "منطقة المزرعة الذكية",
     "profile.role": "الدور",
+    "profile.changePhoto": "تغيير الصورة",
+    "profile.uploading": "جاري الرفع...",
+    "profile.photoUpdated": "تم تحديث صورة الملف الشخصي",
+    "profile.photoError": "فشل رفع الصورة",
     // Login
     "login.title": "المزرعة الذكية",
     "login.subtitle": "سجل دخولك لإدارة مزرعتك الذكية",
