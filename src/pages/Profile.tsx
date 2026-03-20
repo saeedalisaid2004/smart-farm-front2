@@ -23,7 +23,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user?.id) {
-      supabase.from("profiles").select("avatar_url").eq("id", user.id).single().then(({ data }) => {
+      supabase.from("profiles").select("avatar_url").eq("id", user.id).maybeSingle().then(({ data }) => {
         if (data?.avatar_url) setAvatarUrl(data.avatar_url);
       });
     }
