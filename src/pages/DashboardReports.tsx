@@ -7,6 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const DashboardReports = () => {
   const { t } = useLanguage();
+  const [dateRange, setDateRange] = useState("last30");
 
   const reports = [
     { id: 1, name: t("reports.plantReport"), desc: t("reports.plantReportDesc"), date: "December 10, 2024", tags: ["AI Analysis", "Completed"],
