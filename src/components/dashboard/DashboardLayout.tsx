@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home, Leaf, Eye, Sprout, FlaskConical, Apple, MessageCircle, FileText, Settings, Bell, Moon, Sun,
@@ -12,6 +12,7 @@ import {
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { supabase } from "@/integrations/supabase/client";
 
 const menuItems = [
   { icon: Home, labelKey: "dashboard.welcome" as const, path: "/dashboard" },
@@ -53,7 +54,15 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   };
 
   const userName = user?.user_metadata?.full_name || "John Farmer";
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (user?.id) {
+      supabase.from("profiles").select("avatar_url").eq("id", user.id).single().then(({ data }) => {
+        if (data?.avatar_url) setAvatarUrl(data.avatar_url);
+      });
+    }
+  }, [user?.id]);
   return (
     <div className={cn("min-h-screen bg-background flex", isRTL && "flex-row-reverse")}>
       {/* Sidebar */}
@@ -135,8 +144,12 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className={cn("flex items-center gap-2 cursor-pointer", isRTL && "flex-row-reverse")}>
-                  <div className="w-9 h-9 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center relative">
-                    <span className="text-primary text-sm font-semibold">{userName.charAt(0).toUpperCase()}</span>
+                  <div className="w-9 h-9 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center relative overflow-hidden">
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt={userName} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-primary text-sm font-semibold">{userName.charAt(0).toUpperCase()}</span>
+                    )}
                     <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
                   </div>
                   <div className={isRTL ? "text-left" : "text-right"}>
