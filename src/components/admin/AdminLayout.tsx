@@ -47,7 +47,15 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
   };
 
   const userName = user?.user_metadata?.full_name || "Admin User";
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (user?.id) {
+      supabase.from("profiles").select("avatar_url").eq("id", user.id).single().then(({ data }) => {
+        if (data?.avatar_url) setAvatarUrl(data.avatar_url);
+      });
+    }
+  }, [user?.id]);
   return (
     <div className={cn("min-h-screen bg-background flex", isRTL && "flex-row-reverse")}>
       {/* Sidebar */}
