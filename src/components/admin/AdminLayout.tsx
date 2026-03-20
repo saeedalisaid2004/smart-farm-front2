@@ -51,11 +51,20 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
 
   useEffect(() => {
     if (user?.id) {
-      supabase.from("profiles").select("avatar_url").eq("id", user.id).single().then(({ data }) => {
+      supabase.from("profiles").select("avatar_url").eq("id", user.id).maybeSingle().then(({ data }) => {
         if (data?.avatar_url) setAvatarUrl(data.avatar_url);
       });
     }
   }, [user?.id]);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const url = (e as CustomEvent).detail;
+      setAvatarUrl(url);
+    };
+    window.addEventListener("avatar-updated", handler);
+    return () => window.removeEventListener("avatar-updated", handler);
+  }, []);
   return (
     <div className={cn("min-h-screen bg-background flex", isRTL && "flex-row-reverse")}>
       {/* Sidebar */}

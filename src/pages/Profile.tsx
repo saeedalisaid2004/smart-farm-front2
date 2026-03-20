@@ -23,7 +23,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user?.id) {
-      supabase.from("profiles").select("avatar_url").eq("id", user.id).single().then(({ data }) => {
+      supabase.from("profiles").select("avatar_url").eq("id", user.id).maybeSingle().then(({ data }) => {
         if (data?.avatar_url) setAvatarUrl(data.avatar_url);
       });
     }
@@ -49,6 +49,7 @@ const Profile = () => {
 
     await supabase.from("profiles").update({ avatar_url: url }).eq("id", user.id);
     setAvatarUrl(url);
+    window.dispatchEvent(new CustomEvent("avatar-updated", { detail: url }));
     toast({ title: t("profile.photoUpdated") });
     setUploading(false);
   };
