@@ -87,7 +87,7 @@ const AnimalWeight = () => {
             <div className="bg-card border border-border rounded-2xl p-6 grid grid-cols-2 gap-6">
               {/* Estimation Result */}
               <div className="space-y-1">
-                <p className="text-sm font-semibold text-foreground">Estimation Result</p>
+                <p className="text-sm font-semibold text-foreground">{t("animalWeight.estimationResult")}</p>
                 <p className="text-3xl font-bold text-primary">
                   {weightValue ? `${String(weightValue).replace(/\s*kg\s*/gi, "")} kg` : "—"}
                 </p>
