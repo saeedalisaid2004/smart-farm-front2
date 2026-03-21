@@ -203,7 +203,7 @@ const AdminDashboard = () => {
               : []
             ).map((item: any, idx: number) => {
               const timeStr = item.time || "";
-              const date = timeStr ? new Date(timeStr) : null;
+              const date = timeStr ? parseApiTime(timeStr) : null;
               const ago = date ? getTimeAgo(date) : "";
 
               return (
