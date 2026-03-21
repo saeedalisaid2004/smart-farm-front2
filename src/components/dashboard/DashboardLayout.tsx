@@ -111,10 +111,10 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
 
       {/* Main */}
       <div className="flex-1 flex flex-col">
-        <header className={cn("h-16 bg-card border-b border-border flex items-center justify-between px-6 sticky top-0 z-10", isRTL && "flex-row-reverse")}>
+        <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6 sticky top-0 z-10">
           <div className="flex-1" />
           <h2 className="text-lg font-medium text-foreground">{title}</h2>
-          <div className={cn("flex-1 flex items-center gap-4", isRTL ? "justify-start flex-row-reverse" : "justify-end")}>
+          <div className="flex-1 flex items-center gap-4 justify-end">
             <Popover>
               <PopoverTrigger asChild>
                 <button className="relative text-muted-foreground hover:text-foreground transition-colors">
