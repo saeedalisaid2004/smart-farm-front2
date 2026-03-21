@@ -78,6 +78,15 @@ const AnimalWeight = () => {
         </div>
 
         {result && (() => {
+          if (result.detail) {
+            return (
+              <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-6 flex items-start gap-3">
+                <Eye className="w-5 h-5 text-destructive mt-0.5 shrink-0" />
+                <p className="text-sm text-destructive font-medium">{result.detail}</p>
+              </div>
+            );
+          }
+
           const animalName = isRTL
             ? result.animal_name_ar || result.animal_type || result.animal || result.class_name || result.label || result.animal_name_en
             : result.animal_name_en || result.animal_type || result.animal || result.class_name || result.label || result.animal_name_ar;
@@ -85,29 +94,23 @@ const AnimalWeight = () => {
 
           return (
             <div className="bg-card border border-border rounded-2xl p-6 grid grid-cols-2 gap-6">
-              {/* Estimation Result */}
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-foreground">{t("animalWeight.estimationResult")}</p>
                 <p className="text-3xl font-bold text-primary">
                   {weightValue ? `${String(weightValue).replace(/\s*kg\s*/gi, "")} kg` : "—"}
                 </p>
               </div>
-
-              {/* Animal Name */}
               {animalName && (
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-foreground">{t("animalWeight.animalName")}</p>
                   <p className="text-3xl font-bold text-primary">{animalName}</p>
                 </div>
               )}
-
-              {/* Confidence - full width */}
               {result.confidence && (
                 <div className="col-span-2">
                   <p className="text-sm text-muted-foreground">{t("animalWeight.confidence")}: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
                 </div>
               )}
-
               {!weightValue && !animalName && (
                 <pre className="col-span-2 text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
                   {JSON.stringify(result, null, 2)}

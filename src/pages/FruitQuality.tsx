@@ -77,25 +77,36 @@ const FruitQuality = () => {
           </div>
         </div>
 
-        {result && (
-          <div className="bg-card border border-border rounded-2xl p-6 space-y-3">
-            <h3 className="text-lg font-semibold text-foreground">Analysis Result</h3>
-            {result.quality && (
-              <p className="text-2xl font-bold text-primary">{result.quality}</p>
-            )}
-            {result.fruit_type && (
-              <p className="text-sm text-muted-foreground">Fruit: <span className="font-medium text-foreground">{result.fruit_type}</span></p>
-            )}
-            {result.confidence && (
-              <p className="text-sm text-muted-foreground">Confidence: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
-            )}
-            {!result.quality && !result.fruit_type && (
-              <pre className="text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
-                {JSON.stringify(result, null, 2)}
-              </pre>
-            )}
-          </div>
-        )}
+        {result && (() => {
+          if (result.detail) {
+            return (
+              <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-6 flex items-start gap-3">
+                <Apple className="w-5 h-5 text-destructive mt-0.5 shrink-0" />
+                <p className="text-sm text-destructive font-medium">{result.detail}</p>
+              </div>
+            );
+          }
+
+          return (
+            <div className="bg-card border border-border rounded-2xl p-6 space-y-3">
+              <h3 className="text-lg font-semibold text-foreground">Analysis Result</h3>
+              {result.quality && (
+                <p className="text-2xl font-bold text-primary">{result.quality}</p>
+              )}
+              {result.fruit_type && (
+                <p className="text-sm text-muted-foreground">Fruit: <span className="font-medium text-foreground">{result.fruit_type}</span></p>
+              )}
+              {result.confidence && (
+                <p className="text-sm text-muted-foreground">Confidence: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
+              )}
+              {!result.quality && !result.fruit_type && (
+                <pre className="text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
+                  {JSON.stringify(result, null, 2)}
+                </pre>
+              )}
+            </div>
+          );
+        })()}
       </div>
     </DashboardLayout>
   );
