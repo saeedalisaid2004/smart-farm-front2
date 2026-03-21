@@ -54,7 +54,7 @@ const Profile = () => {
       });
       setUser({ ...user, name: editName, email: editEmail });
       setEditing(false);
-      toast({ title: t("profile.profileUpdated") || "Profile updated successfully" });
+      toast({ title: "Profile updated successfully" });
     } catch {
       toast({ title: "Failed to update profile", variant: "destructive" });
     } finally {
