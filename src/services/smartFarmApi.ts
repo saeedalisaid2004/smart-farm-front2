@@ -211,17 +211,17 @@ export const promoteToAdmin = async (email: string) => {
 };
 
 export const getSystemStatus = async () => {
-  const res = await fetch(`${API_BASE}/admin/system/admin/system/status`);
+  const res = await fetch(`${API_BASE}/admin/system/status`);
   return res.json();
 };
 
 export const getSystemSettings = async () => {
-  const res = await fetch(`${API_BASE}/admin/system/admin/system/settings`);
+  const res = await fetch(`${API_BASE}/admin/system/settings`);
   return res.json();
 };
 
 export const toggleSystemSetting = async (settingName: string) => {
-  const res = await fetch(`${API_BASE}/admin/system/admin/system/settings/toggle/${settingName}`, {
+  const res = await fetch(`${API_BASE}/admin/system/settings/toggle/${settingName}`, {
     method: "POST",
   });
   return res.json();
@@ -240,13 +240,18 @@ export const getModelsTable = async () => {
 };
 
 export const getAdminReportStats = async () => {
-  const res = await fetch(`${API_BASE}/admin/reports/admin/reports/dashboard-stats`);
+  const res = await fetch(`${API_BASE}/admin/reports/dashboard-stats`);
   return res.json();
 };
 
 export const generatePremiumReport = async () => {
-  const res = await fetch(`${API_BASE}/admin/reports/admin/reports/generate-pdf`, {
+  const res = await fetch(`${API_BASE}/admin/reports/generate-pdf`, {
     method: "POST",
   });
-  return res.json();
+  const data = await res.json();
+  // Fix relative file_url to absolute
+  if (data.file_url && !data.file_url.startsWith("http")) {
+    data.file_url = `${API_BASE}${data.file_url}`;
+  }
+  return data;
 };
