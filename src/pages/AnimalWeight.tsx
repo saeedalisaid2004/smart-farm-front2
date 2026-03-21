@@ -12,7 +12,7 @@ const AnimalWeight = () => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const { toast } = useToast();
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
