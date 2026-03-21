@@ -14,6 +14,15 @@ const COLORS = [
   "hsl(142, 71%, 85%)",
 ];
 
+const getTimeAgo = (date: Date) => {
+  const now = new Date();
+  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+  if (diff < 60) return `${diff}s ago`;
+  if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  return `${Math.floor(diff / 86400)}d ago`;
+};
+
 const AdminDashboard = () => {
   const { t } = useLanguage();
   const [data, setData] = useState<any>(null);
@@ -175,6 +184,39 @@ const AdminDashboard = () => {
               <Bar dataKey="users" fill="hsl(142, 71%, 45%)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+
+        {/* Recent System Activity */}
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h3 className="font-semibold text-foreground text-lg mb-4">{t("adminDash.recentActivity")}</h3>
+          <div className="divide-y divide-border">
+            {(data?.recent_activity && data.recent_activity.length > 0
+              ? data.recent_activity
+              : []
+            ).map((item: any, idx: number) => {
+              const timeStr = item.time || "";
+              const date = timeStr ? new Date(timeStr) : null;
+              const ago = date ? getTimeAgo(date) : "";
+
+              return (
+                <div key={idx} className="flex items-center justify-between py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Users className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground">{item.user}</p>
+                      <p className="text-sm text-muted-foreground">{item.action}</p>
+                    </div>
+                  </div>
+                  <span className="text-sm text-muted-foreground">{ago}</span>
+                </div>
+              );
+            })}
+            {(!data?.recent_activity || data.recent_activity.length === 0) && (
+              <p className="text-muted-foreground text-sm py-4">No recent activity</p>
+            )}
+          </div>
         </div>
       </div>
     </AdminLayout>
