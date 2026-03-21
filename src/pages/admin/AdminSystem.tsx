@@ -25,23 +25,16 @@ const AdminSystem = () => {
     ]).then(([status, settingsData, modelsData]) => {
       if (status) setSystemStatus(status);
       
-      // Load saved setting overrides
-      const savedSettingOverrides: Record<string, boolean> = JSON.parse(localStorage.getItem("settingOverrides") || "{}");
-      
       if (settingsData) {
         let settingsArr: any[] = [];
         if (Array.isArray(settingsData)) settingsArr = settingsData;
         else if (settingsData.settings) settingsArr = settingsData.settings;
         
-        // Map API status, localStorage overrides only apply if they exist
-        setSettings(settingsArr.map((s: any) => {
-          const apiEnabled = s.status === "online" || s.enabled === true;
-          const hasOverride = s.key && (s.key in savedSettingOverrides);
-          return {
-            ...s,
-            enabled: hasOverride ? savedSettingOverrides[s.key] : apiEnabled,
-          };
-        }));
+        // Map API status directly - the API is the source of truth
+        setSettings(settingsArr.map((s: any) => ({
+          ...s,
+          enabled: s.status === "online" || s.enabled === true,
+        })));
       }
       if (Array.isArray(modelsData)) setModels(modelsData);
       else if (modelsData?.models) setModels(modelsData.models);
