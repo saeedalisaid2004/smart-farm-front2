@@ -77,44 +77,45 @@ const AnimalWeight = () => {
           </div>
         </div>
 
-        {result && (
-          <div className="bg-card border border-border rounded-2xl p-6 space-y-3">
-            <h3 className="text-lg font-semibold text-foreground">Estimation Result</h3>
-            {(() => {
-              const animalName = isRTL
-                ? result.animal_name_ar || result.animal_type || result.animal || result.class_name || result.label || result.animal_name_en
-                : result.animal_name_en || result.animal_type || result.animal || result.class_name || result.label || result.animal_name_ar;
-              const weightValue = result.estimated_weight || result.weight;
+        {result && (() => {
+          const animalName = isRTL
+            ? result.animal_name_ar || result.animal_type || result.animal || result.class_name || result.label || result.animal_name_en
+            : result.animal_name_en || result.animal_type || result.animal || result.class_name || result.label || result.animal_name_ar;
+          const weightValue = result.estimated_weight || result.weight;
 
-              return (
-                <>
-                  {weightValue && (
-                    <div className="flex items-baseline gap-3 flex-wrap">
-                      <p className="text-3xl font-bold text-primary">
-                        {String(weightValue).replace(/\s*kg\s*/gi, "")} kg
-                      </p>
-                      {animalName && (
-                        <span className="text-xl font-semibold text-foreground">
-                          — {animalName}
-                        </span>
-                      )}
-                    </div>
-                  )}
+          return (
+            <div className="bg-card border border-border rounded-2xl p-6 grid grid-cols-2 gap-6">
+              {/* Estimation Result */}
+              <div className="space-y-1">
+                <p className="text-sm font-semibold text-foreground">Estimation Result</p>
+                <p className="text-3xl font-bold text-primary">
+                  {weightValue ? `${String(weightValue).replace(/\s*kg\s*/gi, "")} kg` : "—"}
+                </p>
+              </div>
 
-                  {result.confidence && (
-                    <p className="text-sm text-muted-foreground">Confidence: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
-                  )}
+              {/* Animal Name */}
+              {animalName && (
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-foreground">Animal Name</p>
+                  <p className="text-3xl font-bold text-primary">{animalName}</p>
+                </div>
+              )}
 
-                  {!weightValue && !animalName && (
-                    <pre className="text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
-                      {JSON.stringify(result, null, 2)}
-                    </pre>
-                  )}
-                </>
-              );
-            })()}
-          </div>
-        )}
+              {/* Confidence - full width */}
+              {result.confidence && (
+                <div className="col-span-2">
+                  <p className="text-sm text-muted-foreground">Confidence: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
+                </div>
+              )}
+
+              {!weightValue && !animalName && (
+                <pre className="col-span-2 text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
+                  {JSON.stringify(result, null, 2)}
+                </pre>
+              )}
+            </div>
+          );
+        })()}
       </div>
     </DashboardLayout>
   );
