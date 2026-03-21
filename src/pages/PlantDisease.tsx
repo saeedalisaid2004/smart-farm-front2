@@ -77,40 +77,50 @@ const PlantDisease = () => {
           </div>
         </div>
 
-        {result && (
-          <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              {result.disease && result.disease !== "Healthy" ? (
-                <AlertCircle className="w-6 h-6 text-destructive" />
-              ) : (
-                <CheckCircle className="w-6 h-6 text-primary" />
-              )}
-              <h3 className="text-lg font-semibold text-foreground">
-                {result.disease || result.prediction || "Analysis Result"}
-              </h3>
-            </div>
-            {result.confidence && (
-              <p className="text-sm text-muted-foreground">
-                Confidence: <span className="font-semibold text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span>
-              </p>
-            )}
-            {result.description && (
-              <p className="text-sm text-muted-foreground">{result.description}</p>
-            )}
-            {result.treatment && (
-              <div>
-                <p className="text-sm font-medium text-foreground mb-1">Treatment:</p>
-                <p className="text-sm text-muted-foreground">{result.treatment}</p>
+        {result && (() => {
+          if (result.detail) {
+            return (
+              <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-6 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-destructive mt-0.5 shrink-0" />
+                <p className="text-sm text-destructive font-medium">{result.detail}</p>
               </div>
-            )}
-            {/* Show raw result for any extra fields */}
-            {!result.disease && !result.prediction && (
-              <pre className="text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
-                {JSON.stringify(result, null, 2)}
-              </pre>
-            )}
-          </div>
-        )}
+            );
+          }
+
+          return (
+            <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
+              <div className="flex items-center gap-3">
+                {result.disease && result.disease !== "Healthy" ? (
+                  <AlertCircle className="w-6 h-6 text-destructive" />
+                ) : (
+                  <CheckCircle className="w-6 h-6 text-primary" />
+                )}
+                <h3 className="text-lg font-semibold text-foreground">
+                  {result.disease || result.prediction || "Analysis Result"}
+                </h3>
+              </div>
+              {result.confidence && (
+                <p className="text-sm text-muted-foreground">
+                  Confidence: <span className="font-semibold text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span>
+                </p>
+              )}
+              {result.description && (
+                <p className="text-sm text-muted-foreground">{result.description}</p>
+              )}
+              {result.treatment && (
+                <div>
+                  <p className="text-sm font-medium text-foreground mb-1">Treatment:</p>
+                  <p className="text-sm text-muted-foreground">{result.treatment}</p>
+                </div>
+              )}
+              {!result.disease && !result.prediction && (
+                <pre className="text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
+                  {JSON.stringify(result, null, 2)}
+                </pre>
+              )}
+            </div>
+          );
+        })()}
       </div>
     </DashboardLayout>
   );
