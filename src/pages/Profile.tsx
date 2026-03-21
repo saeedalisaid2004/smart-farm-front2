@@ -110,7 +110,7 @@ const Profile = () => {
                 </div>
                 <div className="flex gap-3">
                   <Button onClick={handleSave} disabled={saving} className="rounded-xl">
-                    <Save className="w-4 h-4 mr-2" />{saving ? "Saving..." : (t("common.save") || "Save")}
+                    <Save className="w-4 h-4 mr-2" />{saving ? "Saving..." : "Save"}
                   </Button>
                   <Button variant="outline" onClick={() => setEditing(false)} className="rounded-xl">
                     <X className="w-4 h-4 mr-2" />{t("common.cancel") || "Cancel"}
