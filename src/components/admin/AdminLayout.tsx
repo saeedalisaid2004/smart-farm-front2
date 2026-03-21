@@ -152,7 +152,7 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
                     ) : (
                       <span className="text-primary text-sm font-semibold">{userName.charAt(0).toUpperCase()}</span>
                     )}
-                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
+                    <span className={cn("absolute -bottom-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card", isRTL ? "-left-0.5" : "-right-0.5")} />
                   </div>
                   <div className={isRTL ? "text-left" : "text-right"}>
                     <p className="text-sm font-medium text-foreground leading-tight">{userName}</p>

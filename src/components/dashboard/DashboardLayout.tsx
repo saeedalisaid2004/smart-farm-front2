@@ -170,15 +170,15 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuLabel>{t("header.myAccount")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate("/dashboard/profile")} className="cursor-pointer">
-                  <User className="w-4 h-4 mr-2" /> {t("header.profile")}
+                <DropdownMenuItem onClick={() => navigate("/dashboard/profile")} className={cn("cursor-pointer", isRTL && "flex-row-reverse")}>
+                  <User className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} /> {t("header.profile")}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/dashboard/settings")} className="cursor-pointer">
-                  <Settings className="w-4 h-4 mr-2" /> {t("dashboard.settings")}
+                <DropdownMenuItem onClick={() => navigate("/dashboard/settings")} className={cn("cursor-pointer", isRTL && "flex-row-reverse")}>
+                  <Settings className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} /> {t("dashboard.settings")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                  <LogOut className="w-4 h-4 mr-2" /> {t("header.logout")}
+                <DropdownMenuItem onClick={handleLogout} className={cn("cursor-pointer", isRTL && "flex-row-reverse")}>
+                  <LogOut className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} /> {t("header.logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
