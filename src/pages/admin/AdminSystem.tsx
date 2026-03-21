@@ -24,9 +24,22 @@ const AdminSystem = () => {
       getModelsTable().catch(() => []),
     ]).then(([status, settingsData, modelsData]) => {
       if (status) setSystemStatus(status);
+      
+      // Load saved setting overrides
+      const savedSettingOverrides: Record<string, boolean> = JSON.parse(localStorage.getItem("settingOverrides") || "{}");
+      
       if (settingsData) {
-        if (Array.isArray(settingsData)) setSettings(settingsData);
-        else if (settingsData.settings) setSettings(settingsData.settings);
+        let settingsArr: any[] = [];
+        if (Array.isArray(settingsData)) settingsArr = settingsData;
+        else if (settingsData.settings) settingsArr = settingsData.settings;
+        
+        // Map API status and apply localStorage overrides
+        setSettings(settingsArr.map((s: any) => ({
+          ...s,
+          enabled: (s.key in savedSettingOverrides) 
+            ? savedSettingOverrides[s.key] 
+            : (s.status === "online" || s.enabled === true),
+        })));
       }
       if (Array.isArray(modelsData)) setModels(modelsData);
       else if (modelsData?.models) setModels(modelsData.models);
