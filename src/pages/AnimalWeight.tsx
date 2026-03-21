@@ -1,5 +1,6 @@
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Upload, Eye, Loader2 } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -92,27 +93,42 @@ const AnimalWeight = () => {
             : result.animal_name_en || result.animal_type || result.animal || result.class_name || result.label || result.animal_name_ar;
           const weightValue = result.estimated_weight || result.weight;
 
+          const confidenceNum = result.confidence
+            ? typeof result.confidence === 'number'
+              ? result.confidence * 100
+              : parseFloat(String(result.confidence))
+            : null;
+
           return (
-            <div className="bg-card border border-border rounded-2xl p-6 grid grid-cols-2 gap-6">
-              <div className="space-y-1">
-                <p className="text-sm font-semibold text-foreground">{t("animalWeight.estimationResult")}</p>
-                <p className="text-3xl font-bold text-primary">
+            <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
+              <h3 className="text-lg font-semibold text-foreground">Estimation Result</h3>
+
+              <div className="bg-primary/10 border-2 border-primary/30 rounded-2xl p-5">
+                <p className="text-sm text-muted-foreground mb-1">Estimated Weight</p>
+                <p className="text-2xl font-bold text-foreground">
                   {weightValue ? `${String(weightValue).replace(/\s*kg\s*/gi, "")} kg` : "—"}
                 </p>
               </div>
+
               {animalName && (
-                <div className="space-y-1">
-                  <p className="text-sm font-semibold text-foreground">{t("animalWeight.animalName")}</p>
-                  <p className="text-3xl font-bold text-primary">{animalName}</p>
+                <div className="bg-secondary/50 border border-border rounded-2xl p-4">
+                  <span className="font-semibold text-foreground">Animal Type: </span>
+                  <span className="text-foreground">{animalName}</span>
                 </div>
               )}
-              {result.confidence && (
-                <div className="col-span-2">
-                  <p className="text-sm text-muted-foreground">{t("animalWeight.confidence")}: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
+
+              {confidenceNum != null && !isNaN(confidenceNum) && (
+                <div className="bg-secondary/50 border border-border rounded-2xl p-4 space-y-2">
+                  <p>
+                    <span className="font-semibold text-foreground">Confidence Score: </span>
+                    <span className="text-foreground">{confidenceNum.toFixed(0)}%</span>
+                  </p>
+                  <Progress value={confidenceNum} className="h-3" />
                 </div>
               )}
+
               {!weightValue && !animalName && (
-                <pre className="col-span-2 text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
+                <pre className="text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
                   {JSON.stringify(result, null, 2)}
                 </pre>
               )}
