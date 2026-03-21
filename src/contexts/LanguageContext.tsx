@@ -67,6 +67,9 @@ const translations = {
     "plantDisease.title": "Plant Disease Detection (CNN)",
     // Animal Weight
     "animalWeight.title": "Animal Weight Estimation",
+    "animalWeight.estimationResult": "Estimation Result",
+    "animalWeight.animalName": "Animal Name",
+    "animalWeight.confidence": "Confidence",
     // Fruit Quality
     "fruitQuality.title": "Fruit Quality Analysis",
     // Crop Recommendation
