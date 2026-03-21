@@ -80,26 +80,39 @@ const AnimalWeight = () => {
         {result && (
           <div className="bg-card border border-border rounded-2xl p-6 space-y-3">
             <h3 className="text-lg font-semibold text-foreground">Estimation Result</h3>
-            {(result.estimated_weight || result.weight) && (
-              <div className="flex items-baseline gap-3 flex-wrap">
-                <p className="text-3xl font-bold text-primary">
-                  {String(result.estimated_weight || result.weight).replace(/\s*kg\s*/gi, '')} kg
-                </p>
-                {(result.animal_type || result.animal || result.class_name || result.label) && (
-                  <span className="text-xl font-semibold text-foreground">
-                    — {result.animal_type || result.animal || result.class_name || result.label}
-                  </span>
-                )}
-              </div>
-            )}
-            {result.confidence && (
-              <p className="text-sm text-muted-foreground">Confidence: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
-            )}
-            {!result.estimated_weight && !result.weight && !result.animal_type && (
-              <pre className="text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
-                {JSON.stringify(result, null, 2)}
-              </pre>
-            )}
+            {(() => {
+              const animalName = isRTL
+                ? result.animal_name_ar || result.animal_type || result.animal || result.class_name || result.label || result.animal_name_en
+                : result.animal_name_en || result.animal_type || result.animal || result.class_name || result.label || result.animal_name_ar;
+              const weightValue = result.estimated_weight || result.weight;
+
+              return (
+                <>
+                  {weightValue && (
+                    <div className="flex items-baseline gap-3 flex-wrap">
+                      <p className="text-3xl font-bold text-primary">
+                        {String(weightValue).replace(/\s*kg\s*/gi, "")} kg
+                      </p>
+                      {animalName && (
+                        <span className="text-xl font-semibold text-foreground">
+                          — {animalName}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {result.confidence && (
+                    <p className="text-sm text-muted-foreground">Confidence: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
+                  )}
+
+                  {!weightValue && !animalName && (
+                    <pre className="text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
+                      {JSON.stringify(result, null, 2)}
+                    </pre>
+                  )}
+                </>
+              );
+            })()}
           </div>
         )}
       </div>
