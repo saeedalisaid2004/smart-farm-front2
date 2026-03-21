@@ -113,7 +113,7 @@ const Profile = () => {
                     <Save className="w-4 h-4 mr-2" />{saving ? "Saving..." : "Save"}
                   </Button>
                   <Button variant="outline" onClick={() => setEditing(false)} className="rounded-xl">
-                    <X className="w-4 h-4 mr-2" />{t("common.cancel") || "Cancel"}
+                    <X className="w-4 h-4 mr-2" />Cancel
                   </Button>
                 </div>
               </div>
