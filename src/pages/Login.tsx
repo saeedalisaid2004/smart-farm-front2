@@ -8,15 +8,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { apiLogin } from "@/services/smartFarmApi";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -24,10 +21,6 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!role) {
-      toast({ variant: "destructive", title: "Error", description: "Please select your role" });
-      return;
-    }
     setLoading(true);
     try {
       // Login with Supabase
@@ -44,7 +37,14 @@ const Login = () => {
         } catch {
           // External API login is optional, continue anyway
         }
-        if (role === "admin") {
+        // Check user role from database
+        const { data: roleData } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", (await supabase.auth.getUser()).data.user?.id ?? "")
+          .maybeSingle();
+        
+        if (roleData?.role === "admin") {
           navigate("/admin/dashboard");
         } else {
           navigate("/dashboard");
@@ -81,18 +81,6 @@ const Login = () => {
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label className="text-foreground font-medium">{t("login.role")}</Label>
-            <Select value={role} onValueChange={setRole}>
-              <SelectTrigger className="h-11 rounded-full bg-secondary border-0 px-4">
-                <SelectValue placeholder={t("login.selectRole")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="farmer">{t("common.farmer")}</SelectItem>
-                <SelectItem value="admin">{t("common.admin")}</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
           <Button type="submit" disabled={loading} className="w-full h-12 rounded-full text-base font-semibold mt-2">
             {loading ? t("login.signingIn") : t("login.signIn")}
