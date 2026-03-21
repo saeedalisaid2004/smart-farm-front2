@@ -214,7 +214,7 @@ const AdminDashboard = () => {
               );
             })}
             {(!data?.recent_activity || data.recent_activity.length === 0) && (
-              <p className="text-muted-foreground text-sm py-4">{t("adminDash.noActivity")}</p>
+              <p className="text-muted-foreground text-sm py-4">No recent activity</p>
             )}
           </div>
         </div>
