@@ -1,5 +1,6 @@
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Upload, Leaf, Loader2, AlertCircle, CheckCircle } from "lucide-react";
+import { Upload, Leaf, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -78,42 +79,61 @@ const PlantDisease = () => {
         </div>
 
         {result && (() => {
-          if (result.detail) {
+          if (result.detail || result.status === "Rejected") {
+            const msg = result.detail || result.message || "Request rejected";
             return (
               <div className="bg-destructive/10 border border-destructive/30 rounded-2xl p-6 flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-destructive mt-0.5 shrink-0" />
-                <p className="text-sm text-destructive font-medium">{result.detail}</p>
+                <p className="text-sm text-destructive font-medium">{msg}</p>
               </div>
             );
           }
 
+          const status = result.disease || result.prediction || result.status || result.label;
+          const isHealthy = status && (status.toLowerCase().includes('healthy') || status.toLowerCase().includes('سليم'));
+          const confidenceRaw = result.confidence;
+          const confidenceNum = confidenceRaw
+            ? typeof confidenceRaw === 'number'
+              ? confidenceRaw * 100
+              : parseFloat(String(confidenceRaw))
+            : null;
+
           return (
             <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
-              <div className="flex items-center gap-3">
-                {result.disease && result.disease !== "Healthy" ? (
-                  <AlertCircle className="w-6 h-6 text-destructive" />
-                ) : (
-                  <CheckCircle className="w-6 h-6 text-primary" />
-                )}
-                <h3 className="text-lg font-semibold text-foreground">
-                  {result.disease || result.prediction || "Analysis Result"}
-                </h3>
-              </div>
-              {result.confidence && (
-                <p className="text-sm text-muted-foreground">
-                  Confidence: <span className="font-semibold text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span>
-                </p>
-              )}
-              {result.description && (
-                <p className="text-sm text-muted-foreground">{result.description}</p>
-              )}
-              {result.treatment && (
-                <div>
-                  <p className="text-sm font-medium text-foreground mb-1">Treatment:</p>
-                  <p className="text-sm text-muted-foreground">{result.treatment}</p>
+              <h3 className="text-lg font-semibold text-foreground">Analysis Result</h3>
+
+              {status && (
+                <div className={`border-2 rounded-2xl p-4 flex items-center gap-3 ${isHealthy ? 'bg-primary/5 border-primary/30' : 'bg-destructive/5 border-destructive/30'}`}>
+                  {isHealthy ? (
+                    <CheckCircle2 className="w-6 h-6 text-primary shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-6 h-6 text-destructive shrink-0" />
+                  )}
+                  <p>
+                    <span className="font-semibold text-foreground">Status: </span>
+                    <span className={isHealthy ? 'text-primary font-medium' : 'text-destructive font-medium'}>{status}</span>
+                  </p>
                 </div>
               )}
-              {!result.disease && !result.prediction && (
+
+              {confidenceNum != null && !isNaN(confidenceNum) && (
+                <div className="bg-secondary/50 border border-border rounded-2xl p-4 space-y-2">
+                  <p>
+                    <span className="font-semibold text-foreground">Confidence: </span>
+                    <span className="text-foreground">{confidenceNum.toFixed(0)}%</span>
+                  </p>
+                  <Progress value={confidenceNum} className="h-3" />
+                </div>
+              )}
+
+              {result.treatment && (
+                <div className="bg-secondary/50 border border-border rounded-2xl p-4">
+                  <span className="font-semibold text-foreground">Treatment: </span>
+                  <span className="text-foreground">{result.treatment}</span>
+                </div>
+              )}
+
+              {!status && (
                 <pre className="text-xs text-muted-foreground bg-secondary rounded-lg p-4 overflow-auto max-h-60">
                   {JSON.stringify(result, null, 2)}
                 </pre>
