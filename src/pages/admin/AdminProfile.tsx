@@ -76,7 +76,7 @@ const AdminProfile = () => {
               </div>
               <div className="flex items-center gap-3 p-4 bg-secondary/50 rounded-xl">
                 <Calendar className="w-5 h-5 text-primary" />
-                <div><p className="text-xs text-muted-foreground">{t("profile.joined")}</p><p className="text-sm font-medium text-foreground">2024</p></div>
+                <div><p className="text-xs text-muted-foreground">{t("profile.location")}</p><p className="text-sm font-medium text-foreground">2024</p></div>
               </div>
             </div>
             <Button className="mt-6 rounded-xl"><Edit2 className="w-4 h-4 mr-2" />{t("profile.editProfile")}</Button>
