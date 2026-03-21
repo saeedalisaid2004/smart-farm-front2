@@ -94,9 +94,10 @@ const SoilAnalysis = () => {
             );
           }
 
-          const soilType = result.soil_type || result.predicted_class || result.prediction;
-          const fertility = result.fertility_level || result.fertility;
-          const recommendation = result.recommendation || result.description;
+          const nested = result.result || {};
+          const soilType = result.soil_type || nested.detected_soil_type || result.predicted_class || result.prediction;
+          const fertility = result.fertility_level || nested.fertility_level || result.fertility;
+          const recommendation = result.recommendation || result.description || nested.message;
 
           const getFertilityColor = (level: string) => {
             const l = level.toLowerCase();
