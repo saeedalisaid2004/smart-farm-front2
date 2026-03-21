@@ -112,7 +112,7 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
               <PopoverTrigger asChild>
                 <button className="relative text-muted-foreground hover:text-foreground transition-colors">
                   <Bell className="w-5 h-5" />
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full" />
+                  <span className={cn("absolute -top-1 w-2 h-2 bg-destructive rounded-full", isRTL ? "-left-1" : "-right-1")} />
                 </button>
               </PopoverTrigger>
               <PopoverContent className="w-96 p-0" align="end">
@@ -152,7 +152,7 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
                     ) : (
                       <span className="text-primary text-sm font-semibold">{userName.charAt(0).toUpperCase()}</span>
                     )}
-                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
+                    <span className={cn("absolute -bottom-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card", isRTL ? "-left-0.5" : "-right-0.5")} />
                   </div>
                   <div className={isRTL ? "text-left" : "text-right"}>
                     <p className="text-sm font-medium text-foreground leading-tight">{userName}</p>
@@ -163,15 +163,15 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuLabel>{t("header.myAccount")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate("/admin/profile")} className="cursor-pointer">
-                  <User className="w-4 h-4 mr-2" /> {t("header.profile")}
+                <DropdownMenuItem onClick={() => navigate("/admin/profile")} className={cn("cursor-pointer", isRTL && "flex-row-reverse")}>
+                  <User className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} /> {t("header.profile")}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/admin/settings")} className="cursor-pointer">
-                  <Settings className="w-4 h-4 mr-2" /> {t("admin.settings")}
+                <DropdownMenuItem onClick={() => navigate("/admin/settings")} className={cn("cursor-pointer", isRTL && "flex-row-reverse")}>
+                  <Settings className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} /> {t("admin.settings")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                  <LogOut className="w-4 h-4 mr-2" /> {t("header.logout")}
+                <DropdownMenuItem onClick={handleLogout} className={cn("cursor-pointer", isRTL && "flex-row-reverse")}>
+                  <LogOut className={cn("w-4 h-4", isRTL ? "ml-2" : "mr-2")} /> {t("header.logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
