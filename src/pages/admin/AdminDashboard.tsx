@@ -26,11 +26,12 @@ const AdminDashboard = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const summary = data?.summary;
   const statsCards = [
-    { icon: Users, label: t("adminDash.totalUsers"), value: data?.active_users ?? "—", sub: t("adminDash.registered"), change: "+12%", changeColor: "text-primary" },
-    { icon: Activity, label: t("adminDash.totalAnalyses"), value: data?.total_analyses ?? "—", sub: t("adminDash.thisMonth"), change: "+23%", changeColor: "text-primary" },
-    { icon: Cpu, label: t("adminDash.aiServices"), value: data?.ai_services_count ?? "6 of 6", sub: t("adminDash.active"), badge: t("adminDash.allOnline"), badgeColor: "text-primary" },
-    { icon: TrendingUp, label: t("adminDash.mostUsed"), value: t("adminDash.plantDisease"), sub: t("adminDash.detection"), badge: t("adminDash.top"), badgeColor: "text-primary" },
+    { icon: Users, label: t("adminDash.totalUsers"), value: summary?.total_users ?? "—", sub: t("adminDash.registered"), change: "+12%", changeColor: "text-primary" },
+    { icon: Activity, label: t("adminDash.totalAnalyses"), value: summary?.total_analyses ?? "—", sub: t("adminDash.thisMonth"), change: "+23%", changeColor: "text-primary" },
+    { icon: Cpu, label: t("adminDash.aiServices"), value: summary?.active_services ?? "6 of 6", sub: t("adminDash.active"), badge: t("adminDash.allOnline"), badgeColor: "text-primary" },
+    { icon: TrendingUp, label: t("adminDash.mostUsed"), value: summary?.top_service ?? t("adminDash.plantDisease"), sub: t("adminDash.detection"), badge: t("adminDash.top"), badgeColor: "text-primary" },
   ];
 
   // Transform charts data from API
