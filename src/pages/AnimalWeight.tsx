@@ -104,7 +104,7 @@ const AnimalWeight = () => {
               {/* Confidence - full width */}
               {result.confidence && (
                 <div className="col-span-2">
-                  <p className="text-sm text-muted-foreground">Confidence: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
+                  <p className="text-sm text-muted-foreground">{t("animalWeight.confidence")}: <span className="font-medium text-foreground">{typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : result.confidence}</span></p>
                 </div>
               )}
 
