@@ -36,14 +36,18 @@ const DashboardReports = () => {
     setGeneratingPdf(true);
     try {
       const data = await generateFarmerPdf(userId);
-      if (data.file_url) {
+      if (data.detail) {
+        toast({ variant: "destructive", title: "Failed to generate report", description: "The server encountered an error generating the PDF. Please try again later." });
+      } else if (data.file_url) {
         window.open(data.file_url, "_blank");
         toast({ title: "Report generated successfully" });
+        // Refresh reports list
+        listFarmerReports(userId).then(r => { if (Array.isArray(r)) setReports(r); });
       } else {
         toast({ title: data.message || "Report generated" });
       }
     } catch {
-      toast({ variant: "destructive", title: "Failed to generate report" });
+      toast({ variant: "destructive", title: "Failed to generate report", description: "Please try again later." });
     } finally {
       setGeneratingPdf(false);
     }
