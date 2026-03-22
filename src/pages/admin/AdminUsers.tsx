@@ -38,6 +38,8 @@ const AdminUsers = () => {
   const [loadingData, setLoadingData] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewUser, setViewUser] = useState<any>(null);
+  const [notifSettings, setNotifSettings] = useState<{ push: boolean; email: boolean } | null>(null);
+  const [loadingNotif, setLoadingNotif] = useState(false);
 
   const loadData = () => {
     setLoadingData(true);
