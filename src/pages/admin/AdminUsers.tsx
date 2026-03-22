@@ -15,8 +15,10 @@ import {
   getUserManagementData, searchUsers as apiSearchUsers,
   deleteUser as apiDeleteUser, deactivateUser as apiDeactivateUser,
   activateUser as apiActivateUser, promoteToAdmin as apiPromoteToAdmin,
+  getUserNotificationSettings, updateUserNotificationSettings,
 } from "@/services/smartFarmApi";
 import { sendNotification } from "@/services/notificationService";
+import { Switch } from "@/components/ui/switch";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
