@@ -117,6 +117,11 @@ const CropRecommendation = () => {
             >
               {(() => {
                 if (result.detail) {
+                  const detailMsg = typeof result.detail === 'string'
+                    ? result.detail
+                    : Array.isArray(result.detail)
+                      ? result.detail.map((d: any) => d.msg || JSON.stringify(d)).join(', ')
+                      : JSON.stringify(result.detail);
                   return (
                     <div className="bg-destructive/5 border border-destructive/20 rounded-2xl p-5 flex items-start gap-3">
                       <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center shrink-0">
@@ -124,7 +129,7 @@ const CropRecommendation = () => {
                       </div>
                       <div>
                         <p className="font-medium text-destructive text-sm">Error</p>
-                        <p className="text-sm text-muted-foreground mt-1">{result.detail}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{detailMsg}</p>
                       </div>
                     </div>
                   );
