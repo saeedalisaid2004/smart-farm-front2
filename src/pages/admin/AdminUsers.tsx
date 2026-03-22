@@ -423,6 +423,32 @@ const AdminUsers = () => {
                   </div>
                 </div>
               )}
+
+              {/* Notification Settings */}
+              <div className="p-3.5 rounded-xl bg-secondary/50 space-y-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <Bell className="w-4 h-4 text-muted-foreground" />
+                  <p className="text-xs text-muted-foreground font-medium">{t("adminUsers.notifications")}</p>
+                </div>
+                {loadingNotif ? (
+                  <div className="flex justify-center py-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                  </div>
+                ) : notifSettings ? (
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-foreground">{t("adminUsers.pushNotif")}</span>
+                      <Switch checked={notifSettings.push} onCheckedChange={(v) => handleToggleNotif("push", v)} />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-foreground">{t("adminUsers.emailNotif")}</span>
+                      <Switch checked={notifSettings.email} onCheckedChange={(v) => handleToggleNotif("email", v)} />
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">N/A</p>
+                )}
+              </div>
             </div>
           </div>
         </DialogContent>
