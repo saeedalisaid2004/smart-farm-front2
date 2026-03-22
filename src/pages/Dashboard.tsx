@@ -22,6 +22,7 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout title={t("dashboard.welcome")}>
+      <OnboardingTour />
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
