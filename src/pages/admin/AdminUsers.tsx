@@ -106,6 +106,7 @@ const AdminUsers = () => {
     try {
       await apiDeactivateUser(user.id || user.user_id);
       toast({ title: `${user.name} deactivated` });
+      sendNotification({ title: "User Deactivated", description: `${user.name || user.email} account has been deactivated`, type: "warning" });
       loadData();
     } catch {
       toast({ title: "Failed", variant: "destructive" });
@@ -116,6 +117,7 @@ const AdminUsers = () => {
     try {
       await apiActivateUser(user.id || user.user_id);
       toast({ title: `${user.name} activated` });
+      sendNotification({ title: "User Activated", description: `${user.name || user.email} account has been activated`, type: "success" });
       loadData();
     } catch {
       toast({ title: "Failed", variant: "destructive" });
