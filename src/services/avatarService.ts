@@ -83,3 +83,10 @@ export function getSavedAvatarUrl(userId?: string | number | null): string | nul
     return null;
   }
 }
+
+export function removeAvatar(userId?: string | number | null): void {
+  try {
+    const scopedKey = getAvatarStorageKey(userId);
+    localStorage.removeItem(scopedKey);
+  } catch {}
+}
