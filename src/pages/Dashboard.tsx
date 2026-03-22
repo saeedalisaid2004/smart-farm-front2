@@ -95,7 +95,7 @@ const Dashboard = () => {
 
         {/* Charts */}
         {total > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+          <div className="mb-8">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
