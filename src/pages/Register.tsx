@@ -15,12 +15,26 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string }>({});
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t, isRTL } = useLanguage();
 
+  const validate = () => {
+    const errs: { name?: string; email?: string; password?: string } = {};
+    if (!name.trim()) errs.name = "Name is required";
+    else if (name.trim().length < 2) errs.name = "Name is too short";
+    if (!email.trim()) errs.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = "Invalid email format";
+    if (!password) errs.password = "Password is required";
+    else if (password.length < 6) errs.password = "Password must be at least 6 characters";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     try {
       const data = await apiRegister(name, email, password);
@@ -61,21 +75,24 @@ const Register = () => {
               <Label htmlFor="name" className="text-foreground font-medium text-sm">{t("register.fullName")}</Label>
               <div className="relative">
                 <User className={`absolute ${isRTL ? "right-4" : "left-4"} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground`} />
-                <Input id="name" type="text" placeholder={t("register.fullNamePlaceholder")} value={name} onChange={(e) => setName(e.target.value)} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary transition-colors ${isRTL ? "pr-12" : "pl-12"}`} required />
+                <Input id="name" type="text" placeholder={t("register.fullNamePlaceholder")} value={name} onChange={(e) => { setName(e.target.value); setErrors(p => ({ ...p, name: undefined })); }} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary transition-colors ${isRTL ? "pr-12" : "pl-12"} ${errors.name ? "border-destructive" : ""}`} />
+                {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground font-medium text-sm">{t("register.email")}</Label>
               <div className="relative">
                 <Mail className={`absolute ${isRTL ? "right-4" : "left-4"} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground`} />
-                <Input id="email" type="email" placeholder="example@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary transition-colors ${isRTL ? "pr-12" : "pl-12"}`} required />
+                <Input id="email" type="email" placeholder="example@email.com" value={email} onChange={(e) => { setEmail(e.target.value); setErrors(p => ({ ...p, email: undefined })); }} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary transition-colors ${isRTL ? "pr-12" : "pl-12"} ${errors.email ? "border-destructive" : ""}`} />
+                {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="password" className="text-foreground font-medium text-sm">{t("register.password")}</Label>
               <div className="relative">
                 <Lock className={`absolute ${isRTL ? "right-4" : "left-4"} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground`} />
-                <Input id="password" type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary transition-colors ${isRTL ? "pr-12 pl-12" : "pl-12 pr-12"}`} required />
+                <Input id="password" type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => { setPassword(e.target.value); setErrors(p => ({ ...p, password: undefined })); }} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary transition-colors ${isRTL ? "pr-12 pl-12" : "pl-12 pr-12"} ${errors.password ? "border-destructive" : ""}`} />
+                {errors.password && <p className="text-xs text-destructive mt-1">{errors.password}</p>}
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className={`absolute ${isRTL ? "left-4" : "right-4"} top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors`}>
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>

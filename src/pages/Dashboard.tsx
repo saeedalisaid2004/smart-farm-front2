@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
+import OnboardingTour from "@/components/OnboardingTour";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -21,6 +22,7 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout title={t("dashboard.welcome")}>
+      <OnboardingTour />
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
