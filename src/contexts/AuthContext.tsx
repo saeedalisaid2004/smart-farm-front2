@@ -34,11 +34,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        const savedAvatar = getSavedAvatarUrl();
-        if (savedAvatar) {
-          parsed.avatar_url = savedAvatar;
-        }
-        setUserState(parsed);
+        const savedAvatar = getSavedAvatarUrl(parsed.id || parsed.email);
+        setUserState(savedAvatar ? { ...parsed, avatar_url: savedAvatar } : parsed);
       } catch {
         localStorage.removeItem("app_user");
       }
@@ -47,15 +44,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const setUser = (u: AppUser | null) => {
-    setUserState(u);
     if (u) {
-      // Don't store base64 avatar in app_user to avoid localStorage size issues
-      const { avatar_url, ...rest } = u;
+      const savedAvatar = u.avatar_url || getSavedAvatarUrl(u.id || u.email);
+      const nextUser = savedAvatar ? { ...u, avatar_url: savedAvatar } : u;
+      setUserState(nextUser);
+
+      const { avatar_url, ...rest } = nextUser;
       localStorage.setItem("app_user", JSON.stringify(rest));
-    } else {
-      localStorage.removeItem("app_user");
-      localStorage.removeItem("avatar_base64");
+      return;
     }
+
+    setUserState(null);
+    localStorage.removeItem("app_user");
   };
 
   const signOut = () => {
