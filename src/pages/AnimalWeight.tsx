@@ -7,6 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { estimateAnimalWeight, getExternalUserId } from "@/services/smartFarmApi";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { sendNotification } from "@/services/notificationService";
 
 const AnimalWeight = () => {
   const fileRef = useRef<HTMLInputElement>(null);
