@@ -84,7 +84,8 @@ const Login = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-foreground font-medium text-sm">{t("login.email")}</Label>
-            <Input id="email" type="email" placeholder={t("login.emailPlaceholder")} value={email} onChange={(e) => setEmail(e.target.value)} required className="h-12 rounded-xl bg-secondary/50 border-border focus:border-primary px-4 transition-colors" />
+            <Input id="email" type="email" placeholder={t("login.emailPlaceholder")} value={email} onChange={(e) => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: undefined })); }} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary px-4 transition-colors ${errors.email ? "border-destructive" : ""}`} />
+            {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
           </div>
           <div className="space-y-2">
             <Label htmlFor="password" className="text-foreground font-medium text-sm">{t("login.password")}</Label>
