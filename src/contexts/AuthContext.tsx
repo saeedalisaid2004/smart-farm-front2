@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { getSavedAvatarUrl } from "@/services/avatarService";
 
 interface AppUser {
   id: number;
