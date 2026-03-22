@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Users, UserCheck, UserX, Shield, Search, MoreVertical, Mail, Eye, UserMinus, Trash2, UserPlus, Loader2, Calendar } from "lucide-react";
+import { getSavedAvatarUrl } from "@/services/avatarService";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -207,11 +209,16 @@ const AdminUsers = () => {
                     <tr key={user.id || user.user_id || idx} className="hover:bg-secondary/20 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                            <span className="text-primary font-semibold text-sm">
+                          <Avatar className="w-10 h-10 rounded-xl">
+                            {(() => {
+                              const aid = user.id || user.user_id;
+                              const avatarUrl = user.avatar_url || (aid ? getSavedAvatarUrl(aid) : null);
+                              return avatarUrl ? <AvatarImage src={avatarUrl} className="rounded-xl object-cover" /> : null;
+                            })()}
+                            <AvatarFallback className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary font-semibold text-sm">
                               {(user.name || user.full_name || "U").charAt(0).toUpperCase()}
-                            </span>
-                          </div>
+                            </AvatarFallback>
+                          </Avatar>
                           <span className="text-sm font-medium text-foreground">{user.name || user.full_name || "User"}</span>
                         </div>
                       </td>
