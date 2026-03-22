@@ -26,12 +26,21 @@ const getNotificationIcon = (type: string) => {
   }
 };
 
+const adminMenuItems = [
+  { icon: LayoutDashboard, labelKey: "admin.dashboard" as const, path: "/admin/dashboard", gradient: "from-blue-500 to-indigo-600" },
+  { icon: Users, labelKey: "admin.users" as const, path: "/admin/users", gradient: "from-emerald-500 to-green-600" },
+  { icon: Monitor, labelKey: "admin.system" as const, path: "/admin/system", gradient: "from-orange-500 to-amber-600" },
+  { icon: BarChart3, labelKey: "admin.reports" as const, path: "/admin/reports", gradient: "from-purple-500 to-violet-600" },
+  { icon: Settings, labelKey: "admin.settings" as const, path: "/admin/settings", gradient: "from-slate-500 to-gray-600" },
+];
+
 interface AdminLayoutProps {
   children: ReactNode;
   title: string;
 }
 
 const AdminLayout = ({ children, title }: AdminLayoutProps) => {
+  const { notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification } = useNotifications();
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
