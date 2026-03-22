@@ -90,7 +90,8 @@ const Login = () => {
           <div className="space-y-2">
             <Label htmlFor="password" className="text-foreground font-medium text-sm">{t("login.password")}</Label>
             <div className="relative">
-              <Input id="password" type={showPassword ? "text" : "password"} placeholder={t("login.passwordPlaceholder")} value={password} onChange={(e) => setPassword(e.target.value)} required className="h-12 rounded-xl bg-secondary/50 border-border focus:border-primary px-4 pr-11 transition-colors" />
+              <Input id="password" type={showPassword ? "text" : "password"} placeholder={t("login.passwordPlaceholder")} value={password} onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: undefined })); }} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary px-4 pr-11 transition-colors ${errors.password ? "border-destructive" : ""}`} />
+              {errors.password && <p className="text-xs text-destructive mt-1">{errors.password}</p>}
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
