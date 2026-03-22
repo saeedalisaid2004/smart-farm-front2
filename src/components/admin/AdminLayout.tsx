@@ -2,7 +2,7 @@ import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Users, Monitor, BarChart3, Settings, Bell, Moon, Sun,
-  Leaf, User, LogOut, CheckCircle, AlertCircle, Globe
+  Leaf, User, LogOut, CheckCircle, AlertCircle, Globe, Menu, X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,19 +12,19 @@ import {
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-
+import { motion, AnimatePresence } from "framer-motion";
 
 const adminMenuItems = [
-  { icon: LayoutDashboard, labelKey: "admin.dashboard" as const, path: "/admin/dashboard" },
-  { icon: Users, labelKey: "admin.users" as const, path: "/admin/users" },
-  { icon: Monitor, labelKey: "admin.system" as const, path: "/admin/system" },
-  { icon: BarChart3, labelKey: "admin.reports" as const, path: "/admin/reports" },
-  { icon: Settings, labelKey: "admin.settings" as const, path: "/admin/settings" },
+  { icon: LayoutDashboard, labelKey: "admin.dashboard" as const, path: "/admin/dashboard", gradient: "from-blue-500 to-indigo-600" },
+  { icon: Users, labelKey: "admin.users" as const, path: "/admin/users", gradient: "from-emerald-500 to-green-600" },
+  { icon: Monitor, labelKey: "admin.system" as const, path: "/admin/system", gradient: "from-orange-500 to-amber-600" },
+  { icon: BarChart3, labelKey: "admin.reports" as const, path: "/admin/reports", gradient: "from-purple-500 to-violet-600" },
+  { icon: Settings, labelKey: "admin.settings" as const, path: "/admin/settings", gradient: "from-slate-500 to-gray-600" },
 ];
 
 const notifications = [
-  { id: 1, icon: CheckCircle, title: "New user registered", desc: "A new farmer has joined the platform", time: "5 min ago", color: "text-green-500", bg: "bg-green-50", unread: true },
-  { id: 2, icon: AlertCircle, title: "System alert", desc: "High server load detected", time: "30 min ago", color: "text-destructive", bg: "bg-red-50", unread: true },
+  { id: 1, icon: CheckCircle, title: "New user registered", desc: "A new farmer has joined the platform", time: "5 min ago", color: "text-emerald-500", bg: "bg-emerald-500/10", unread: true },
+  { id: 2, icon: AlertCircle, title: "System alert", desc: "High server load detected", time: "30 min ago", color: "text-destructive", bg: "bg-destructive/10", unread: true },
   { id: 3, icon: Globe, title: "Service update", desc: "Plant Disease Detection model updated", time: "2 hours ago", color: "text-primary", bg: "bg-primary/10", unread: false },
 ];
 
@@ -38,6 +38,7 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { t, isRTL } = useLanguage();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const toggleTheme = () => document.documentElement.classList.toggle("dark");
 
@@ -61,162 +62,178 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
     window.addEventListener("avatar-updated", handler);
     return () => window.removeEventListener("avatar-updated", handler);
   }, []);
+
+  const SidebarContent = () => (
+    <>
+      <div className={cn("p-5 flex items-center gap-3", isRTL && "flex-row-reverse")}>
+        <div className="w-11 h-11 bg-gradient-to-br from-primary to-primary/70 rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20">
+          <Leaf className="w-5 h-5 text-primary-foreground" />
+        </div>
+        <span className="text-lg font-bold text-foreground">{t("app.name")}</span>
+      </div>
+
+      <nav className="flex-1 px-3 py-4">
+        <ul className="space-y-1.5">
+          {adminMenuItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <li key={item.path}>
+                <Link
+                  to={item.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-300",
+                    isRTL && "flex-row-reverse text-right",
+                    isActive
+                      ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-medium shadow-md shadow-primary/20"
+                      : "text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
+                  )}
+                >
+                  <div className={cn(
+                    "w-8 h-8 rounded-lg flex items-center justify-center transition-all",
+                    isActive ? "bg-white/20" : "bg-transparent"
+                  )}>
+                    <item.icon className="w-4.5 h-4.5 shrink-0" />
+                  </div>
+                  <span>{t(item.labelKey)}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      <div className="p-4 mx-3 mb-4 rounded-2xl bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/10">
+        <p className="text-xs text-muted-foreground font-medium">Smart Farm AI</p>
+        <p className="text-xs text-muted-foreground/70 mt-1">Admin Panel v2.0</p>
+      </div>
+    </>
+  );
+
   return (
     <div className="min-h-screen bg-background flex">
-      {/* Sidebar */}
-      <aside className={cn("h-screen w-64 bg-card border-border flex flex-col sticky top-0", isRTL ? "border-l order-last" : "border-r order-first")}>
-        <div className={cn("p-5 flex items-center gap-3", isRTL && "flex-row-reverse")}>
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-            <Leaf className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <span className="text-lg font-semibold text-foreground">{t("app.name")}</span>
-        </div>
-
-        <nav className="flex-1 px-3 py-2">
-          <ul className="space-y-1">
-            {adminMenuItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    className={cn(
-                      "flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all duration-200",
-                      isRTL && "flex-row-reverse text-right",
-                      isActive
-                        ? "bg-primary text-primary-foreground font-medium"
-                        : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                    )}
-                  >
-                    <item.icon className="w-5 h-5 shrink-0" />
-                    <span>{t(item.labelKey)}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+      {/* Desktop Sidebar */}
+      <aside className={cn(
+        "hidden md:flex h-screen w-64 bg-card/80 backdrop-blur-xl border-border flex-col sticky top-0",
+        isRTL ? "border-l order-last" : "border-r order-first"
+      )}>
+        <SidebarContent />
       </aside>
 
-      {/* Main */}
-      <div className="flex-1 flex flex-col">
-        <header className="h-16 bg-card border-b border-border flex items-center px-6 sticky top-0 z-10">
-          <div className={cn("flex items-center gap-4", isRTL ? "order-first" : "order-last")}>
-            {!isRTL && (
-              <>
-                <button onClick={toggleTheme} className="text-muted-foreground hover:text-foreground transition-colors">
-                  <Moon className="w-5 h-5 dark:hidden" />
-                  <Sun className="w-5 h-5 hidden dark:block" />
-                </button>
+      {/* Mobile Sidebar */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.aside
+              initial={{ x: isRTL ? 280 : -280 }}
+              animate={{ x: 0 }}
+              exit={{ x: isRTL ? 280 : -280 }}
+              transition={{ type: "spring", damping: 25 }}
+              className={cn(
+                "fixed top-0 h-screen w-64 bg-card z-50 flex flex-col md:hidden shadow-2xl",
+                isRTL ? "right-0" : "left-0"
+              )}
+            >
+              <SidebarContent />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button className="relative text-muted-foreground hover:text-foreground transition-colors">
-                      <Bell className="w-5 h-5" />
-                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full" />
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-96 p-0" align="end">
-                    <div className="flex items-center justify-between p-4 border-b border-border">
-                      <h3 className="font-semibold text-foreground">{t("header.notifications")}</h3>
-                      <span className="text-xs bg-destructive text-destructive-foreground px-2 py-0.5 rounded-full font-medium">2 new</span>
+      {/* Main */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="h-16 bg-card/80 backdrop-blur-xl border-b border-border flex items-center px-4 md:px-6 sticky top-0 z-30">
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="md:hidden w-9 h-9 rounded-xl bg-secondary/80 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors mr-3"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          <h2 className="text-lg font-semibold text-foreground flex-1">{title}</h2>
+
+          <div className={cn("flex items-center gap-2 md:gap-3", isRTL && "flex-row-reverse")}>
+            <button
+              onClick={toggleTheme}
+              className="w-9 h-9 rounded-xl bg-secondary/80 flex items-center justify-center text-muted-foreground hover:text-foreground transition-all hover:bg-secondary"
+            >
+              <Moon className="w-4 h-4 dark:hidden" />
+              <Sun className="w-4 h-4 hidden dark:block" />
+            </button>
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="relative w-9 h-9 rounded-xl bg-secondary/80 flex items-center justify-center text-muted-foreground hover:text-foreground transition-all hover:bg-secondary">
+                  <Bell className="w-4 h-4" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-destructive rounded-full border-2 border-card" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-96 p-0 rounded-2xl border-border/50 shadow-xl" align={isRTL ? "start" : "end"}>
+                <div className="flex items-center justify-between p-4 border-b border-border">
+                  <h3 className="font-semibold text-foreground">{t("header.notifications")}</h3>
+                  <span className="text-xs bg-destructive text-destructive-foreground px-2.5 py-0.5 rounded-full font-medium">2 new</span>
+                </div>
+                <div className="max-h-80 overflow-y-auto">
+                  {notifications.map((n) => (
+                    <div key={n.id} className="flex items-start gap-3 p-4 border-b border-border/50 last:border-0 hover:bg-secondary/50 transition-colors cursor-pointer">
+                      <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", n.bg)}>
+                        <n.icon className={cn("w-5 h-5", n.color)} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">{n.title}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{n.desc}</p>
+                        <p className="text-xs text-muted-foreground/60 mt-1">{n.time}</p>
+                      </div>
+                      {n.unread && <div className="w-2.5 h-2.5 rounded-full bg-primary shrink-0 mt-1.5" />}
                     </div>
-                    <div className="max-h-80 overflow-y-auto">
-                      {notifications.map((n) => (
-                        <div key={n.id} className="flex items-start gap-3 p-4 border-b border-border last:border-0 hover:bg-secondary/50 transition-colors cursor-pointer">
-                          <div className={cn("w-10 h-10 rounded-full flex items-center justify-center shrink-0", n.bg)}>
-                            <n.icon className={cn("w-5 h-5", n.color)} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground">{n.title}</p>
-                            <p className="text-xs text-muted-foreground mt-0.5">{n.desc}</p>
-                            <p className="text-xs text-muted-foreground mt-1">{n.time}</p>
-                          </div>
-                          {n.unread && <div className="w-2.5 h-2.5 rounded-full bg-green-500 shrink-0 mt-1.5" />}
-                        </div>
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </>
-            )}
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className={cn("flex items-center gap-2 cursor-pointer", isRTL && "flex-row-reverse")}>
-                  <div className="w-9 h-9 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center relative overflow-hidden">
+                <button className={cn("flex items-center gap-2.5 cursor-pointer rounded-xl px-2 py-1.5 hover:bg-secondary/50 transition-colors", isRTL && "flex-row-reverse")}>
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center relative overflow-hidden shadow-md shadow-primary/20">
                     {avatarUrl ? (
                       <img src={avatarUrl} alt={userName} className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-primary text-sm font-semibold">{userName.charAt(0).toUpperCase()}</span>
+                      <span className="text-primary-foreground text-sm font-bold">{userName.charAt(0).toUpperCase()}</span>
                     )}
-                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
+                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-card" />
                   </div>
-                  <div className={cn("text-right", isRTL && "text-left")}>
+                  <div className={cn("hidden md:block", isRTL ? "text-left" : "text-right")}>
                     <p className="text-sm font-medium text-foreground leading-tight">{userName}</p>
                     <p className="text-xs text-muted-foreground leading-tight">{t("common.admin")}</p>
                   </div>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align={isRTL ? "start" : "end"} className="w-48">
+              <DropdownMenuContent align={isRTL ? "start" : "end"} className="w-48 rounded-xl">
                 <DropdownMenuLabel>{t("header.myAccount")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate("/admin/profile")} className="cursor-pointer">
+                <DropdownMenuItem onClick={() => navigate("/admin/profile")} className="cursor-pointer rounded-lg">
                   <User className="w-4 h-4 mr-2" /> {t("header.profile")}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/admin/settings")} className="cursor-pointer">
+                <DropdownMenuItem onClick={() => navigate("/admin/settings")} className="cursor-pointer rounded-lg">
                   <Settings className="w-4 h-4 mr-2" /> {t("admin.settings")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer rounded-lg text-destructive">
                   <LogOut className="w-4 h-4 mr-2" /> {t("header.logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            {isRTL && (
-              <>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button className="relative text-muted-foreground hover:text-foreground transition-colors">
-                      <Bell className="w-5 h-5" />
-                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full" />
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-96 p-0" align="start">
-                    <div className="flex items-center justify-between p-4 border-b border-border">
-                      <h3 className="font-semibold text-foreground">{t("header.notifications")}</h3>
-                      <span className="text-xs bg-destructive text-destructive-foreground px-2 py-0.5 rounded-full font-medium">2 new</span>
-                    </div>
-                    <div className="max-h-80 overflow-y-auto">
-                      {notifications.map((n) => (
-                        <div key={n.id} className="flex items-start gap-3 p-4 border-b border-border last:border-0 hover:bg-secondary/50 transition-colors cursor-pointer">
-                          <div className={cn("w-10 h-10 rounded-full flex items-center justify-center shrink-0", n.bg)}>
-                            <n.icon className={cn("w-5 h-5", n.color)} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground">{n.title}</p>
-                            <p className="text-xs text-muted-foreground mt-0.5">{n.desc}</p>
-                            <p className="text-xs text-muted-foreground mt-1">{n.time}</p>
-                          </div>
-                          {n.unread && <div className="w-2.5 h-2.5 rounded-full bg-green-500 shrink-0 mt-1.5" />}
-                        </div>
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
-
-                <button onClick={toggleTheme} className="text-muted-foreground hover:text-foreground transition-colors">
-                  <Moon className="w-5 h-5 dark:hidden" />
-                  <Sun className="w-5 h-5 hidden dark:block" />
-                </button>
-              </>
-            )}
           </div>
-          <h2 className="text-lg font-medium text-foreground flex-1 text-center">{title}</h2>
         </header>
 
-        <main className="flex-1 p-8">{children}</main>
+        <main className="flex-1 p-4 md:p-8">{children}</main>
       </div>
     </div>
   );
