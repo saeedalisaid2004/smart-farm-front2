@@ -167,7 +167,7 @@ const translations = {
     "register.joinTitle": "Join us today",
     "register.joinSubtitle": "Start your journey with us and enjoy an integrated management experience",
     // Index
-    "index.brand": "Dashboard",
+    "index.brand": "Smart Farm AI",
     "index.login": "Sign In",
     "index.register": "Create Account",
     "index.badge": "Integrated Management Platform",
@@ -480,7 +480,7 @@ const translations = {
     "register.joinTitle": "انضم إلينا اليوم",
     "register.joinSubtitle": "ابدأ رحلتك معنا واستمتع بتجربة إدارة متكاملة",
     // Index
-    "index.brand": "لوحة التحكم",
+    "index.brand": "Smart Farm AI",
     "index.login": "تسجيل الدخول",
     "index.register": "إنشاء حساب",
     "index.badge": "منصة إدارة متكاملة",
