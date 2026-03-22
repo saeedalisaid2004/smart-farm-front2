@@ -56,6 +56,16 @@ const AdminProfile = () => {
     }
   };
 
+  const handleRemoveAvatar = () => {
+    if (!user) return;
+    const userId = getExternalUserId() || user.id;
+    removeAvatar(String(userId));
+    setAvatarUrl(null);
+    setUser({ ...user, avatar_url: undefined });
+    window.dispatchEvent(new CustomEvent("avatar-updated", { detail: null }));
+    toast({ title: "Profile photo removed" });
+  };
+
   const handleSave = async () => {
     const userId = getExternalUserId();
     if (!userId || !user) return;
