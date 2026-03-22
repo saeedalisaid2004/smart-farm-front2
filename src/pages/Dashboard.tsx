@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import OnboardingTour from "@/components/OnboardingTour";
 import { useEffect, useState } from "react";
 import { getAnalysisStats, getDailyStats, getTotalAnalyses, type AnalysisStats } from "@/services/analysisStats";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -95,7 +95,7 @@ const Dashboard = () => {
 
         {/* Charts */}
         {total > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+          <div className="mb-8">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -123,32 +123,6 @@ const Dashboard = () => {
               </ResponsiveContainer>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-card border border-border rounded-2xl p-6 shadow-card"
-            >
-              <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-primary" /> Daily Activity (Last 7 Days)
-              </h3>
-              <ResponsiveContainer width="100%" height={220}>
-                <AreaChart data={dailyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "12px",
-                      color: "hsl(var(--foreground))",
-                    }}
-                  />
-                  <Area type="monotone" dataKey="analyses" stroke="hsl(var(--primary))" fill="hsl(var(--primary) / 0.15)" strokeWidth={2} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </motion.div>
           </div>
         )}
 
