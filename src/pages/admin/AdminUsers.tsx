@@ -130,6 +130,32 @@ const AdminUsers = () => {
     }
   };
 
+  const handleViewUser = async (user: any) => {
+    setViewUser(user);
+    setNotifSettings(null);
+    const uid = user.id || user.user_id;
+    if (uid) {
+      setLoadingNotif(true);
+      try {
+        const data = await getUserNotificationSettings(uid);
+        if (data.current_settings) setNotifSettings(data.current_settings);
+      } catch {}
+      setLoadingNotif(false);
+    }
+  };
+
+  const handleToggleNotif = async (key: "push" | "email", value: boolean) => {
+    if (!viewUser) return;
+    const uid = viewUser.id || viewUser.user_id;
+    try {
+      const data = await updateUserNotificationSettings(uid, { [key]: value });
+      if (data.current_settings) setNotifSettings(data.current_settings);
+      toast({ title: t("adminUsers.notifUpdated") || "Notification settings updated" });
+    } catch {
+      toast({ title: "Failed", variant: "destructive" });
+    }
+  };
+
   return (
     <AdminLayout title={t("adminUsers.title")}>
       <div className="space-y-6">
