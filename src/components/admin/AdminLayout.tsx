@@ -2,7 +2,7 @@ import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Users, Monitor, BarChart3, Settings, Bell, Moon, Sun,
-  Leaf, User, LogOut, CheckCircle, AlertCircle, Globe, Menu, X
+  Leaf, User, LogOut, CheckCircle, AlertCircle, Info, Menu, X, Trash2, CheckCheck
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,20 +13,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNotifications } from "@/hooks/useNotifications";
+import { formatDistanceToNow } from "date-fns";
+import { ar, enUS } from "date-fns/locale";
 
-const adminMenuItems = [
-  { icon: LayoutDashboard, labelKey: "admin.dashboard" as const, path: "/admin/dashboard", gradient: "from-blue-500 to-indigo-600" },
-  { icon: Users, labelKey: "admin.users" as const, path: "/admin/users", gradient: "from-emerald-500 to-green-600" },
-  { icon: Monitor, labelKey: "admin.system" as const, path: "/admin/system", gradient: "from-orange-500 to-amber-600" },
-  { icon: BarChart3, labelKey: "admin.reports" as const, path: "/admin/reports", gradient: "from-purple-500 to-violet-600" },
-  { icon: Settings, labelKey: "admin.settings" as const, path: "/admin/settings", gradient: "from-slate-500 to-gray-600" },
-];
-
-const notifications = [
-  { id: 1, icon: CheckCircle, title: "New user registered", desc: "A new farmer has joined the platform", time: "5 min ago", color: "text-emerald-500", bg: "bg-emerald-500/10", unread: true },
-  { id: 2, icon: AlertCircle, title: "System alert", desc: "High server load detected", time: "30 min ago", color: "text-destructive", bg: "bg-destructive/10", unread: true },
-  { id: 3, icon: Globe, title: "Service update", desc: "Plant Disease Detection model updated", time: "2 hours ago", color: "text-primary", bg: "bg-primary/10", unread: false },
-];
+const getNotificationIcon = (type: string) => {
+  switch (type) {
+    case "success": return { icon: CheckCircle, color: "text-green-500", bg: "bg-green-500/10" };
+    case "warning": return { icon: AlertCircle, color: "text-amber-500", bg: "bg-amber-500/10" };
+    case "error": return { icon: AlertCircle, color: "text-destructive", bg: "bg-destructive/10" };
+    default: return { icon: Info, color: "text-primary", bg: "bg-primary/10" };
+  }
+};
 
 interface AdminLayoutProps {
   children: ReactNode;
