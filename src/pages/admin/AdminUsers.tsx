@@ -14,6 +14,7 @@ import {
   deleteUser as apiDeleteUser, deactivateUser as apiDeactivateUser,
   activateUser as apiActivateUser, promoteToAdmin as apiPromoteToAdmin,
 } from "@/services/smartFarmApi";
+import { sendNotification } from "@/services/notificationService";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
