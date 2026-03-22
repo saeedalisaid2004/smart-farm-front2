@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, BarChart3, Shield, Zap, Users, Leaf, Sprout, FlaskConical, ChevronDown } from "lucide-react";
+import { ArrowLeft, BarChart3, Shield, Zap, Users, Leaf, Sprout, FlaskConical, ChevronDown, Moon, Sun } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 
