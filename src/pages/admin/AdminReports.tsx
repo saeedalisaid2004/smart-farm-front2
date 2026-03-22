@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
-import { TrendingUp, Users, Globe, Activity, Filter, FileText, Calendar, Download, Loader2 } from "lucide-react";
+import { TrendingUp, Users, Globe, Activity, Filter, FileText, Download, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +13,15 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getAdminReportStats, generatePremiumReport } from "@/services/smartFarmApi";
 import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+  })
+};
 
 const AdminReports = () => {
   const { t } = useLanguage();
@@ -59,31 +68,25 @@ const AdminReports = () => {
   const growthData = data?.charts?.user_growth
     ? Object.entries(data.charts.user_growth).map(([month, users]) => ({ month, users }))
     : [
-        { month: "Jan", users: 120 },
-        { month: "Feb", users: 180 },
-        { month: "Mar", users: 240 },
-        { month: "Apr", users: 300 },
-        { month: "May", users: 380 },
-        { month: "Jun", users: 420 },
+        { month: "Jan", users: 120 }, { month: "Feb", users: 180 },
+        { month: "Mar", users: 240 }, { month: "Apr", users: 300 },
+        { month: "May", users: 380 }, { month: "Jun", users: 420 },
       ];
 
   const dailyData = data?.charts?.daily_activity
     ? Object.entries(data.charts.daily_activity).map(([day, activity]) => ({ day, activity }))
     : [
-        { day: "Jun 1", activity: 240 },
-        { day: "Jun 2", activity: 265 },
-        { day: "Jun 3", activity: 250 },
-        { day: "Jun 4", activity: 300 },
-        { day: "Jun 5", activity: 270 },
-        { day: "Jun 6", activity: 210 },
+        { day: "Jun 1", activity: 240 }, { day: "Jun 2", activity: 265 },
+        { day: "Jun 3", activity: 250 }, { day: "Jun 4", activity: 300 },
+        { day: "Jun 5", activity: 270 }, { day: "Jun 6", activity: 210 },
         { day: "Jun 7", activity: 180 },
       ];
 
   const statsCards = [
-    { icon: TrendingUp, label: t("adminReports.totalAnalyses"), value: data?.total_analyses ?? "8,456", change: `+23% ${t("adminReports.fromLastMonth")}`, color: "text-green-600", bg: "bg-green-50" },
-    { icon: Users, label: t("adminReports.activeUsers"), value: data?.active_users ?? "1,247", change: `+12% ${t("adminReports.fromLastMonth")}`, color: "text-blue-600", bg: "bg-blue-50" },
-    { icon: Globe, label: t("adminReports.aiServices"), value: data?.ai_services_count ?? "6 Active", change: t("adminReports.uptimePercent"), color: "text-green-600", bg: "bg-green-50" },
-    { icon: Activity, label: t("adminReports.avgResponse"), value: data?.avg_response_time ?? "145ms", change: `-8% ${t("adminReports.fromLastMonth")}`, color: "text-green-600", bg: "bg-orange-50" },
+    { icon: TrendingUp, label: t("adminReports.totalAnalyses"), value: data?.total_analyses ?? "8,456", change: `+23% ${t("adminReports.fromLastMonth")}`, gradient: "from-emerald-500 to-green-600" },
+    { icon: Users, label: t("adminReports.activeUsers"), value: data?.active_users ?? "1,247", change: `+12% ${t("adminReports.fromLastMonth")}`, gradient: "from-blue-500 to-indigo-600" },
+    { icon: Globe, label: t("adminReports.aiServices"), value: data?.ai_services_count ?? "6 Active", change: t("adminReports.uptimePercent"), gradient: "from-purple-500 to-violet-600" },
+    { icon: Activity, label: t("adminReports.avgResponse"), value: data?.avg_response_time ?? "145ms", change: `-8% ${t("adminReports.fromLastMonth")}`, gradient: "from-orange-500 to-amber-600" },
   ];
 
   if (loading) {
@@ -99,23 +102,31 @@ const AdminReports = () => {
   return (
     <AdminLayout title={t("adminReports.title")}>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">{t("adminReports.title")}</h1>
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("adminReports.title")}</h1>
           <p className="text-muted-foreground mt-1">{t("adminReports.subtitle")}</p>
-        </div>
+        </motion.div>
 
-        <div className="bg-card border border-border rounded-xl p-6">
-          <div className="flex items-center gap-2 mb-3">
-            <Filter className="w-5 h-5 text-primary" />
+        {/* Filters */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-card border border-border rounded-2xl p-5"
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-slate-500 to-gray-600 flex items-center justify-center">
+              <Filter className="w-4 h-4 text-white" />
+            </div>
             <h3 className="font-semibold text-foreground">{t("adminReports.filters")}</h3>
           </div>
           <div>
             <p className="text-sm text-muted-foreground mb-1.5">{t("adminReports.dateRange")}</p>
             <Select defaultValue="30">
-              <SelectTrigger className="w-64 h-10">
+              <SelectTrigger className="w-64 h-11 rounded-xl">
                 <SelectValue placeholder={t("adminReports.dateRange")} />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl">
                 <SelectItem value="7">{t("adminReports.last7")}</SelectItem>
                 <SelectItem value="30">{t("adminReports.last30")}</SelectItem>
                 <SelectItem value="90">{t("adminReports.last90")}</SelectItem>
@@ -123,28 +134,42 @@ const AdminReports = () => {
               </SelectContent>
             </Select>
           </div>
-        </div>
+        </motion.div>
 
+        {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {statsCards.map((stat) => (
-            <div key={stat.label} className="bg-card border border-border rounded-xl p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <div className={`w-9 h-9 rounded-full ${stat.bg} flex items-center justify-center`}>
-                  <stat.icon className={`w-4 h-4 ${stat.color}`} />
+          {statsCards.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              custom={i}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              className="bg-card border border-border rounded-2xl p-5 hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-lg`}>
+                  <stat.icon className="w-5 h-5 text-white" />
                 </div>
                 <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
               </div>
               <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-              <p className={`text-xs mt-1 ${stat.color}`}>{stat.change}</p>
-            </div>
+              <p className="text-xs mt-1 text-primary font-medium">{stat.change}</p>
+            </motion.div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="bg-card border border-border rounded-xl p-6">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-green-600" />
+        {/* Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-card border border-border rounded-2xl p-6"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground">{t("adminReports.usageByService")}</h3>
@@ -156,16 +181,21 @@ const AdminReports = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="service" stroke="hsl(var(--muted-foreground))" fontSize={11} />
                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} />
-                <Tooltip />
-                <Bar dataKey="value" fill="hsl(142, 71%, 45%)" radius={[4, 4, 0, 0]} />
+                <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
+                <Bar dataKey="value" fill="hsl(142, 71%, 45%)" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
+          </motion.div>
 
-          <div className="bg-card border border-border rounded-xl p-6">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center">
-                <Users className="w-4 h-4 text-blue-600" />
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-card border border-border rounded-2xl p-6"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                <Users className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground">{t("adminReports.userGrowth")}</h3>
@@ -177,17 +207,23 @@ const AdminReports = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={11} />
                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} />
-                <Tooltip />
-                <Line type="monotone" dataKey="users" stroke="hsl(142, 71%, 45%)" strokeWidth={2} dot={{ fill: "hsl(142, 71%, 45%)", r: 4 }} />
+                <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
+                <Line type="monotone" dataKey="users" stroke="hsl(142, 71%, 45%)" strokeWidth={3} dot={{ fill: "hsl(142, 71%, 45%)", r: 5, strokeWidth: 2, stroke: "hsl(var(--card))" }} />
               </LineChart>
             </ResponsiveContainer>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-6">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
-              <TrendingUp className="w-4 h-4 text-green-600" />
+        {/* Daily Activity */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="bg-card border border-border rounded-2xl p-6"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center">
+              <Activity className="w-5 h-5 text-white" />
             </div>
             <div>
               <h3 className="font-semibold text-foreground">{t("adminReports.dailyActivity")}</h3>
@@ -199,29 +235,35 @@ const AdminReports = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" fontSize={11} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} />
-              <Tooltip />
-              <Line type="monotone" dataKey="activity" stroke="hsl(142, 71%, 45%)" strokeWidth={2} dot={{ fill: "hsl(142, 71%, 45%)", r: 4 }} />
+              <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
+              <Line type="monotone" dataKey="activity" stroke="hsl(142, 71%, 45%)" strokeWidth={3} dot={{ fill: "hsl(142, 71%, 45%)", r: 5, strokeWidth: 2, stroke: "hsl(var(--card))" }} />
             </LineChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
 
-        <div className="bg-card border border-border rounded-xl p-6">
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
-                <FileText className="w-4 h-4 text-green-600" />
+        {/* Generate Report */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="bg-card border border-border rounded-2xl p-6"
+        >
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center">
+                <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground">{t("adminReports.generatedReports")}</h3>
                 <p className="text-sm text-muted-foreground">{t("adminReports.downloadHistorical")}</p>
               </div>
             </div>
-            <Button onClick={handleGenerateReport} disabled={generatingPdf} className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-5">
-              {generatingPdf ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+            <Button onClick={handleGenerateReport} disabled={generatingPdf} className="rounded-xl px-6 shadow-md shadow-primary/20 gap-2">
+              {generatingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
               {t("adminReports.generateNew")}
             </Button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </AdminLayout>
   );
