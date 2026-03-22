@@ -133,7 +133,7 @@ const AdminUsers = () => {
           </div>
           <Button onClick={() => setShowAddAdmin(true)} className="gap-2 rounded-xl shadow-md shadow-primary/20">
             <UserPlus className="w-4 h-4" />
-            {t("adminUsers.addUser")}
+            {t("adminUsers.addAdmin")}
           </Button>
         </motion.div>
 
