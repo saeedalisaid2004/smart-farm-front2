@@ -1,30 +1,46 @@
-import { supabase } from "@/integrations/supabase/client";
+const AVATAR_URL_KEY = "avatar_base64";
+const MAX_SIZE = 200; // max width/height in pixels
 
-const BUCKET = "avatars";
-const AVATAR_URL_KEY = "avatar_cloud_url";
+function compressImage(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let w = img.width;
+        let h = img.height;
 
-export async function uploadAvatar(userId: string | number, file: File): Promise<string> {
-  const ext = file.name.split(".").pop() || "jpg";
-  const path = `${userId}/avatar.${ext}`;
+        // Scale down
+        if (w > h) {
+          if (w > MAX_SIZE) { h = (h * MAX_SIZE) / w; w = MAX_SIZE; }
+        } else {
+          if (h > MAX_SIZE) { w = (w * MAX_SIZE) / h; h = MAX_SIZE; }
+        }
 
-  // Upload (upsert) to storage
-  const { error } = await supabase.storage
-    .from(BUCKET)
-    .upload(path, file, { upsert: true, cacheControl: "0" });
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d")!;
+        ctx.drawImage(img, 0, 0, w, h);
 
-  if (error) throw error;
+        // Compress as JPEG
+        const base64 = canvas.toDataURL("image/jpeg", 0.7);
+        resolve(base64);
+      };
+      img.onerror = reject;
+      img.src = reader.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
-  // Get public URL
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-  // Add cache-bust param
-  const url = `${data.publicUrl}?t=${Date.now()}`;
-
-  // Persist URL locally as fallback
-  localStorage.setItem(AVATAR_URL_KEY, url);
-
-  return url;
+export async function uploadAvatar(_userId: string | number, file: File): Promise<string> {
+  const base64 = await compressImage(file);
+  localStorage.setItem(AVATAR_URL_KEY, base64);
+  return base64;
 }
 
 export function getSavedAvatarUrl(): string | null {
-  return localStorage.getItem(AVATAR_URL_KEY) || localStorage.getItem("avatar_base64") || null;
+  return localStorage.getItem(AVATAR_URL_KEY) || null;
 }
