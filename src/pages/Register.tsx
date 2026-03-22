@@ -91,7 +91,8 @@ const Register = () => {
               <Label htmlFor="password" className="text-foreground font-medium text-sm">{t("register.password")}</Label>
               <div className="relative">
                 <Lock className={`absolute ${isRTL ? "right-4" : "left-4"} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground`} />
-                <Input id="password" type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary transition-colors ${isRTL ? "pr-12 pl-12" : "pl-12 pr-12"}`} required />
+                <Input id="password" type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => { setPassword(e.target.value); setErrors(p => ({ ...p, password: undefined })); }} className={`h-12 rounded-xl bg-secondary/50 border-border focus:border-primary transition-colors ${isRTL ? "pr-12 pl-12" : "pl-12 pr-12"} ${errors.password ? "border-destructive" : ""}`} />
+                {errors.password && <p className="text-xs text-destructive mt-1">{errors.password}</p>}
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className={`absolute ${isRTL ? "left-4" : "right-4"} top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors`}>
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
