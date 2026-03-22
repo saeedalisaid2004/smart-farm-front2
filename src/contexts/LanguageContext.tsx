@@ -480,7 +480,7 @@ const translations = {
     "register.joinTitle": "انضم إلينا اليوم",
     "register.joinSubtitle": "ابدأ رحلتك معنا واستمتع بتجربة إدارة متكاملة",
     // Index
-    "index.brand": "لوحة التحكم",
+    "index.brand": "Smart Farm AI",
     "index.login": "تسجيل الدخول",
     "index.register": "إنشاء حساب",
     "index.badge": "منصة إدارة متكاملة",
