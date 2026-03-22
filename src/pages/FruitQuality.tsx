@@ -7,6 +7,7 @@ import { analyzeFruit, getExternalUserId } from "@/services/smartFarmApi";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { sendNotification } from "@/services/notificationService";
+import { incrementAnalysis } from "@/services/analysisStats";
 
 const FruitQuality = () => {
   const fileRef = useRef<HTMLInputElement>(null);
