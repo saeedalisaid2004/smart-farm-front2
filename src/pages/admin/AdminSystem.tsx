@@ -8,6 +8,7 @@ import {
   getSystemStatus, getSystemSettings, getModelsTable,
   toggleService as apiToggleService, toggleSystemSetting as apiToggleSystemSetting,
 } from "@/services/smartFarmApi";
+import { sendNotification } from "@/services/notificationService";
 
 const AdminSystem = () => {
   const { t } = useLanguage();
