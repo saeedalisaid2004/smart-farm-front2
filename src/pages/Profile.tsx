@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { User, Mail, Phone, MapPin, Calendar, Edit2, Camera, Save, X } from "lucide-react";
+import { User, Mail, Phone, MapPin, Calendar, Edit2, Camera, Save, X, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { apiSaveSettings, getExternalUserId } from "@/services/smartFarmApi";
-import { uploadAvatar, getSavedAvatarUrl } from "@/services/avatarService";
+import { uploadAvatar, getSavedAvatarUrl, removeAvatar } from "@/services/avatarService";
 
 const SETTINGS_STORAGE_KEY = "dashboard_settings";
 
@@ -83,6 +83,16 @@ const Profile = () => {
     }
   };
 
+  const handleRemoveAvatar = () => {
+    if (!user) return;
+    const userId = getExternalUserId() || user.id;
+    removeAvatar(String(userId));
+    setAvatarUrl(null);
+    setUser({ ...user, avatar_url: undefined });
+    window.dispatchEvent(new CustomEvent("avatar-updated", { detail: null }));
+    toast({ title: "Profile photo removed" });
+  };
+
   const handleSave = async () => {
     const userId = getExternalUserId();
     if (!userId || !user) return;
@@ -133,6 +143,14 @@ const Profile = () => {
                 >
                   <Camera className="w-4 h-4" />
                 </button>
+                {avatarUrl && (
+                  <button
+                    onClick={handleRemoveAvatar}
+                    className="absolute -top-2 -right-2 w-7 h-7 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center shadow-lg hover:opacity-90 transition-opacity"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
                 <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
               </div>
               <div className="pb-2">
