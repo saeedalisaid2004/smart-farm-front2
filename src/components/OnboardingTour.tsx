@@ -52,6 +52,8 @@ const steps: Step[] = [
   },
 ];
 
+const TOUR_KEY = "onboarding_completed";
+
 const OnboardingTour = () => {
   const [show, setShow] = useState(false);
   const [current, setCurrent] = useState(0);
