@@ -162,7 +162,7 @@ const SmartFarmChatbot = () => {
                       msg.role === "user"
                         ? "bg-primary text-primary-foreground rounded-br-md"
                         : "bg-secondary text-foreground rounded-bl-md"
-                    )}>
+                    )} dir="auto">
                       {msg.content}
                     </div>
                     <p className="text-[10px] text-muted-foreground mt-1 px-1">{msg.time}</p>
