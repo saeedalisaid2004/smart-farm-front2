@@ -162,7 +162,7 @@ const FruitQuality = () => {
                   <div className="bg-card border border-border rounded-2xl p-6 space-y-4 shadow-card">
                     <div className="flex items-center gap-2">
                       <div className={`w-2 h-2 rounded-full ${isLowGrade ? 'bg-destructive' : 'bg-primary'}`} />
-                      <h3 className="text-lg font-semibold text-foreground">Analysis Results</h3>
+                      <h3 className="text-lg font-semibold text-foreground">{t("fruitQuality.results")}</h3>
                     </div>
 
                     {grade && (
