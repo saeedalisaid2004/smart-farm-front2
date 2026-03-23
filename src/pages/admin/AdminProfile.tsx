@@ -94,9 +94,9 @@ const AdminProfile = () => {
         <div className="bg-card border border-border rounded-2xl overflow-hidden">
           <div className="h-32 gradient-primary relative" />
           <div className="px-8 pb-8">
-            <div className="flex items-end gap-6 -mt-16 mb-6">
-              <div className="relative">
-                <div className="w-28 h-28 rounded-2xl border-4 border-card bg-secondary flex items-center justify-center overflow-hidden">
+            <div className="flex items-end gap-6 -mt-12 mb-6">
+              <div className="relative flex-shrink-0">
+                <div className="w-24 h-24 rounded-2xl border-4 border-card bg-secondary flex items-center justify-center overflow-hidden">
                   {avatarUrl ? (
                     <img src={avatarUrl} alt={userName} className="w-full h-full object-cover" />
                   ) : (
