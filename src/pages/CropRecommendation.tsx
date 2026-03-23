@@ -128,8 +128,8 @@ const CropRecommendation = () => {
                         <AlertCircle className="w-5 h-5 text-destructive" />
                       </div>
                       <div>
-                        <p className="font-medium text-destructive text-sm">Error</p>
-                        <p className="text-sm text-muted-foreground mt-1">{detailMsg}</p>
+                        <p className="font-medium text-destructive text-sm">{t("crop.error")}</p>
+                        <p className="text-sm text-muted-foreground mt-1" dir="auto">{detailMsg}</p>
                       </div>
                     </div>
                   );
@@ -150,7 +150,7 @@ const CropRecommendation = () => {
                   <div className="bg-card border border-border rounded-2xl p-6 space-y-4 shadow-card">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-primary" />
-                      <h3 className="text-lg font-semibold text-foreground">Recommendation Result</h3>
+                      <h3 className="text-lg font-semibold text-foreground">{t("crop.resultTitle")}</h3>
                     </div>
 
                     {crop && (
@@ -159,8 +159,8 @@ const CropRecommendation = () => {
                           <Sprout className="w-7 h-7 text-white" />
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground mb-0.5">Recommended Crop</p>
-                          <p className="text-2xl font-bold text-foreground capitalize">{crop}</p>
+                           <p className="text-xs text-muted-foreground mb-0.5">{t("crop.recommendedCrop")}</p>
+                           <p className="text-2xl font-bold text-foreground capitalize" dir="auto">{crop}</p>
                         </div>
                       </div>
                     )}
@@ -171,16 +171,16 @@ const CropRecommendation = () => {
                           <TrendingUp className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground">Expected Yield Level</p>
-                          <p className={`font-bold ${getYieldStyle(yieldLevel)}`}>{yieldLevel}</p>
+                           <p className="text-xs text-muted-foreground">{t("crop.yieldLevel")}</p>
+                           <p className={`font-bold ${getYieldStyle(yieldLevel)}`} dir="auto">{yieldLevel}</p>
                         </div>
                       </div>
                     )}
 
                     {description && (
                       <div className="bg-gradient-to-br from-secondary/60 to-secondary/30 border border-border rounded-2xl p-6">
-                        <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-3">Details</p>
-                        <p className="text-base text-foreground leading-7 font-medium" dir="auto" style={{ lineHeight: 1.9 }}>{description}</p>
+                         <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-3">{t("crop.details")}</p>
+                         <p className="text-base text-foreground leading-7 font-medium" dir="auto" style={{ lineHeight: 1.9 }}>{description}</p>
                       </div>
                     )}
 

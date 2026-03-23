@@ -95,6 +95,11 @@ const translations = {
     "crop.peaty": "Peaty",
     "crop.chalky": "Chalky",
     "crop.recommend": "Recommend Crop",
+    "crop.resultTitle": "Recommendation Result",
+    "crop.recommendedCrop": "Recommended Crop",
+    "crop.yieldLevel": "Expected Yield Level",
+    "crop.details": "Details",
+    "crop.error": "Error",
     // Soil Analysis
     "soil.title": "Soil Type Analysis",
     "soil.manualInput": "Manual Soil Properties Input",
@@ -424,6 +429,11 @@ const translations = {
     "crop.peaty": "خثية",
     "crop.chalky": "طباشيرية",
     "crop.recommend": "توصية المحصول",
+    "crop.resultTitle": "نتيجة التوصية",
+    "crop.recommendedCrop": "المحصول الموصى به",
+    "crop.yieldLevel": "مستوى العائد المتوقع",
+    "crop.details": "التفاصيل",
+    "crop.error": "خطأ",
     // Soil Analysis
     "soil.title": "تحليل نوع التربة",
     "soil.manualInput": "إدخال خصائص التربة يدوياً",
