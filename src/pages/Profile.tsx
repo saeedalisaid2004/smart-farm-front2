@@ -11,11 +11,13 @@ import { useToast } from "@/hooks/use-toast";
 import { apiSaveSettings, getExternalUserId } from "@/services/smartFarmApi";
 import { uploadAvatar, getSavedAvatarUrl, removeAvatar } from "@/services/avatarService";
 
-const SETTINGS_STORAGE_KEY = "dashboard_settings";
+const getSettingsKey = (userId?: string | number) => {
+  return userId ? `dashboard_settings_${userId}` : "dashboard_settings";
+};
 
-const getStoredPhone = () => {
+const getStoredPhone = (userId?: string | number) => {
   try {
-    const stored = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    const stored = localStorage.getItem(getSettingsKey(userId));
     const parsed = stored ? JSON.parse(stored) : {};
     return parsed.phone && parsed.phone !== "+1234567890" ? parsed.phone : "";
   } catch {
@@ -23,20 +25,14 @@ const getStoredPhone = () => {
   }
 };
 
-const persistPhone = (phone: string) => {
+const persistPhone = (phone: string, userId?: string | number) => {
   try {
-    const stored = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    const key = getSettingsKey(userId);
+    const stored = localStorage.getItem(key);
     const parsed = stored ? JSON.parse(stored) : {};
-
-    localStorage.setItem(
-      SETTINGS_STORAGE_KEY,
-      JSON.stringify({
-        ...parsed,
-        phone,
-      }),
-    );
+    localStorage.setItem(key, JSON.stringify({ ...parsed, phone }));
   } catch {
-    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ phone }));
+    localStorage.setItem(getSettingsKey(userId), JSON.stringify({ phone }));
   }
 };
 
@@ -55,15 +51,16 @@ const Profile = () => {
 
   const [editName, setEditName] = useState(userName);
   const [editEmail, setEditEmail] = useState(userEmail);
-  const [editPhone, setEditPhone] = useState(getStoredPhone());
+  const currentUserId = getExternalUserId() || user?.id;
+  const [editPhone, setEditPhone] = useState(getStoredPhone(currentUserId));
 
   useEffect(() => {
     setAvatarUrl(user?.avatar_url || getSavedAvatarUrl());
   }, [user?.avatar_url]);
 
   useEffect(() => {
-    setEditPhone(getStoredPhone());
-  }, []);
+    setEditPhone(getStoredPhone(currentUserId));
+  }, [currentUserId]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -106,7 +103,7 @@ const Profile = () => {
         phone: editPhone,
       });
 
-      persistPhone(editPhone);
+      persistPhone(editPhone, currentUserId);
       setUser({
         ...user,
         name: editName,

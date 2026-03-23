@@ -26,9 +26,11 @@ const AdminProfile = () => {
 
   const [editName, setEditName] = useState(userName);
   const [editEmail, setEditEmail] = useState(userEmail);
+  const currentUserId = getExternalUserId() || user?.id;
   const getStoredPhone = () => {
     try {
-      const stored = localStorage.getItem("admin_settings");
+      const key = currentUserId ? `admin_settings_${currentUserId}` : "admin_settings";
+      const stored = localStorage.getItem(key);
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed.phone && parsed.phone !== "+1234567890") return parsed.phone;
