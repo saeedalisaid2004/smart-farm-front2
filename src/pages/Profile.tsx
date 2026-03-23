@@ -59,8 +59,8 @@ const Profile = () => {
   }, [user?.avatar_url]);
 
   useEffect(() => {
-    setEditPhone(getStoredPhone());
-  }, []);
+    setEditPhone(getStoredPhone(currentUserId));
+  }, [currentUserId]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
