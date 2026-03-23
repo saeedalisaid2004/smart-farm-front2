@@ -51,7 +51,8 @@ const Profile = () => {
 
   const [editName, setEditName] = useState(userName);
   const [editEmail, setEditEmail] = useState(userEmail);
-  const [editPhone, setEditPhone] = useState(getStoredPhone());
+  const currentUserId = getExternalUserId() || user?.id;
+  const [editPhone, setEditPhone] = useState(getStoredPhone(currentUserId));
 
   useEffect(() => {
     setAvatarUrl(user?.avatar_url || getSavedAvatarUrl());
