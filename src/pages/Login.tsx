@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Leaf } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { apiLogin } from "@/services/smartFarmApi";
+import { apiLogin, apiGetProfileImage } from "@/services/smartFarmApi";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 
@@ -38,11 +38,13 @@ const Login = () => {
     try {
       const data = await apiLogin(email, password);
       if (data.user) {
+        const avatarUrl = apiGetProfileImage(data.user.id);
         setUser({
           id: data.user.id,
           name: data.user.name,
           email: data.user.email,
           role: data.user.role,
+          avatar_url: avatarUrl,
         });
         if (data.user.role === "admin") {
           navigate("/admin/dashboard");
