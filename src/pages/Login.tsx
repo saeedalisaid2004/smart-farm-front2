@@ -38,11 +38,13 @@ const Login = () => {
     try {
       const data = await apiLogin(email, password);
       if (data.user) {
+        const avatarUrl = apiGetProfileImage(data.user.id);
         setUser({
           id: data.user.id,
           name: data.user.name,
           email: data.user.email,
           role: data.user.role,
+          avatar_url: avatarUrl,
         });
         if (data.user.role === "admin") {
           navigate("/admin/dashboard");
