@@ -402,6 +402,13 @@ const translations = {
     "animalWeight.confidence": "نسبة الثقة",
     // Fruit Quality
     "fruitQuality.title": "تحليل جودة الفاكهة",
+    "fruitQuality.results": "نتائج التحليل",
+    "fruitQuality.qualityGrade": "درجة الجودة",
+    "fruitQuality.ripenessLevel": "مستوى النضج",
+    "fruitQuality.defectDetection": "كشف العيوب",
+    "fruitQuality.confidence": "نسبة الثقة",
+    "fruitQuality.lowConfidence": "ثقة منخفضة",
+    "fruitQuality.error": "خطأ في التحليل",
     // Crop Recommendation
     "crop.title": "توصيات المحاصيل (ML)",
     "crop.envParams": "المعايير البيئية",
