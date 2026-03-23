@@ -159,8 +159,8 @@ const CropRecommendation = () => {
                           <Sprout className="w-7 h-7 text-white" />
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground mb-0.5">Recommended Crop</p>
-                          <p className="text-2xl font-bold text-foreground capitalize">{crop}</p>
+                           <p className="text-xs text-muted-foreground mb-0.5">{t("crop.recommendedCrop")}</p>
+                           <p className="text-2xl font-bold text-foreground capitalize" dir="auto">{crop}</p>
                         </div>
                       </div>
                     )}
