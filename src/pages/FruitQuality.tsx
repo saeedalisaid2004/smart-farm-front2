@@ -200,7 +200,7 @@ const FruitQuality = () => {
 
                     {defect && (
                       <div className="bg-secondary/40 border border-border rounded-2xl p-4">
-                        <p className="text-xs text-muted-foreground mb-1">Defect Detection</p>
+                        <p className="text-xs text-muted-foreground mb-1">{t("fruitQuality.defectDetection")}</p>
                         <p className="text-sm text-foreground" dir="auto">{defect}</p>
                       </div>
                     )}
