@@ -192,7 +192,7 @@ const FruitQuality = () => {
                           <Apple className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground">Ripeness Level</p>
+                          <p className="text-xs text-muted-foreground">{t("fruitQuality.ripenessLevel")}</p>
                           <p className="font-semibold text-foreground" dir="auto">{ripeness}</p>
                         </div>
                       </div>
