@@ -73,6 +73,13 @@ const translations = {
     "animalWeight.confidence": "Confidence",
     // Fruit Quality
     "fruitQuality.title": "Fruit Quality Analysis",
+    "fruitQuality.results": "Analysis Results",
+    "fruitQuality.qualityGrade": "Quality Grade",
+    "fruitQuality.ripenessLevel": "Ripeness Level",
+    "fruitQuality.defectDetection": "Defect Detection",
+    "fruitQuality.confidence": "Confidence",
+    "fruitQuality.lowConfidence": "Low Confidence",
+    "fruitQuality.error": "Analysis Error",
     // Crop Recommendation
     "crop.title": "Crop Recommendation (ML)",
     "crop.envParams": "Environmental Parameters",
