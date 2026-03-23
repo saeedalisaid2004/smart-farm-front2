@@ -93,8 +93,10 @@ export const apiSaveSettings = async (
   return res.json();
 };
 
-export const apiGetProfileImage = (userId: number): string => {
-  return `${API_BASE}/profile-image/${userId}`;
+export const buildProfileImageUrl = (profileImagePath?: string): string | null => {
+  if (!profileImagePath) return null;
+  if (profileImagePath.startsWith("http")) return profileImagePath;
+  return `${API_BASE}/${profileImagePath}`;
 };
 
 // ============ AI Analysis ============
