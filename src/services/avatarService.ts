@@ -1,4 +1,4 @@
-import { apiSaveSettings, apiGetProfileImage, getExternalUserId } from "./smartFarmApi";
+import { apiSaveSettings, buildProfileImageUrl, getExternalUserId } from "./smartFarmApi";
 
 const AVATAR_CACHE_KEY = "avatar_cache";
 
@@ -23,43 +23,39 @@ function getCacheKey(userId?: string | number | null): string {
 export async function uploadAvatar(userId: string | number, file: File): Promise<string> {
   const numericId = getExternalUserId() || Number(userId);
 
-  // Upload to API
   try {
-    await apiSaveSettings(numericId, { profile_img: file });
+    const result = await apiSaveSettings(numericId, { profile_img: file });
+    const profilePath = result?.data?.profile_image;
+    const url = buildProfileImageUrl(profilePath);
+    if (url) {
+      const timestampedUrl = `${url}?t=${Date.now()}`;
+      try { localStorage.setItem(getCacheKey(userId), timestampedUrl); } catch {}
+      return timestampedUrl;
+    }
   } catch (err) {
     console.error("Failed to upload avatar to API:", err);
   }
 
-  // Build the profile image URL and cache it
-  const url = apiGetProfileImage(numericId);
-  const timestampedUrl = `${url}?t=${Date.now()}`;
-
-  try {
-    localStorage.setItem(getCacheKey(userId), timestampedUrl);
-  } catch {}
-
-  return timestampedUrl;
+  // Fallback: try reading from cache
+  return getSavedAvatarUrl(userId) || "";
 }
 
 export function getSavedAvatarUrl(userId?: string | number | null): string | null {
-  // Check localStorage cache first
   try {
     const cached = localStorage.getItem(getCacheKey(userId));
     if (cached) return cached;
   } catch {}
-
-  // Build URL from API if we have a numeric user id
-  const numId = getExternalUserId() || (userId ? Number(userId) : null);
-  if (numId && !isNaN(numId)) {
-    const url = apiGetProfileImage(numId);
-    return url;
-  }
-
   return null;
 }
 
+export function saveAvatarUrlFromApi(userId: string | number, profileImagePath?: string): string | null {
+  const url = buildProfileImageUrl(profileImagePath);
+  if (url) {
+    try { localStorage.setItem(getCacheKey(userId), url); } catch {}
+  }
+  return url;
+}
+
 export function removeAvatar(userId?: string | number | null): void {
-  try {
-    localStorage.removeItem(getCacheKey(userId));
-  } catch {}
+  try { localStorage.removeItem(getCacheKey(userId)); } catch {}
 }
