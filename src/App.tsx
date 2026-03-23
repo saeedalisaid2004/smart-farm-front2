@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import AdminRoute from "@/components/AdminRoute";
 import { lazy, Suspense } from "react";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
 import AnalysisSkeleton from "@/components/AnalysisSkeleton";
@@ -64,12 +65,12 @@ const App = () => (
             <Route path="/dashboard/reports" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><DashboardReports /></Suspense></ProtectedRoute>} />
             <Route path="/dashboard/settings" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><DashboardSettings /></Suspense></ProtectedRoute>} />
             <Route path="/dashboard/profile" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><Profile /></Suspense></ProtectedRoute>} />
-            <Route path="/admin/dashboard" element={<ProtectedRoute><Suspense fallback={<PageLoader skeleton="dashboard" />}><AdminDashboard /></Suspense></ProtectedRoute>} />
-            <Route path="/admin/users" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminUsers /></Suspense></ProtectedRoute>} />
-            <Route path="/admin/system" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminSystem /></Suspense></ProtectedRoute>} />
-            <Route path="/admin/reports" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminReports /></Suspense></ProtectedRoute>} />
-            <Route path="/admin/profile" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminProfile /></Suspense></ProtectedRoute>} />
-            <Route path="/admin/settings" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminSettings /></Suspense></ProtectedRoute>} />
+            <Route path="/admin/dashboard" element={<AdminRoute><Suspense fallback={<PageLoader skeleton="dashboard" />}><AdminDashboard /></Suspense></AdminRoute>} />
+            <Route path="/admin/users" element={<AdminRoute><Suspense fallback={<PageLoader />}><AdminUsers /></Suspense></AdminRoute>} />
+            <Route path="/admin/system" element={<AdminRoute><Suspense fallback={<PageLoader />}><AdminSystem /></Suspense></AdminRoute>} />
+            <Route path="/admin/reports" element={<AdminRoute><Suspense fallback={<PageLoader />}><AdminReports /></Suspense></AdminRoute>} />
+            <Route path="/admin/profile" element={<AdminRoute><Suspense fallback={<PageLoader />}><AdminProfile /></Suspense></AdminRoute>} />
+            <Route path="/admin/settings" element={<AdminRoute><Suspense fallback={<PageLoader />}><AdminSettings /></Suspense></AdminRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           </LanguageProvider>
