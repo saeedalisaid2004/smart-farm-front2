@@ -171,7 +171,7 @@ const FruitQuality = () => {
                           <Star className={`w-6 h-6 ${isLowGrade ? 'text-destructive' : 'text-primary'}`} />
                         </div>
                         <div className="flex-1">
-                          <p className="text-xs text-muted-foreground mb-0.5">Quality Grade</p>
+                          <p className="text-xs text-muted-foreground mb-0.5">{t("fruitQuality.qualityGrade")}</p>
                           <p className={`text-2xl font-bold ${isLowGrade ? 'text-destructive' : 'text-primary'}`}>{grade}</p>
                           {gradeDescription && (
                             <p className="text-xs text-muted-foreground mt-0.5" dir="auto">{gradeDescription}</p>
