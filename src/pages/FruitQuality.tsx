@@ -179,7 +179,7 @@ const FruitQuality = () => {
                         </div>
                         {confidence && (
                           <div className="text-right">
-                            <p className="text-xs text-muted-foreground">Confidence</p>
+                            <p className="text-xs text-muted-foreground">{t("fruitQuality.confidence")}</p>
                             <p className={`text-lg font-bold ${isLowGrade ? 'text-destructive' : 'text-primary'}`}>{confidence}</p>
                           </div>
                         )}
