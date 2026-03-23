@@ -56,6 +56,13 @@ const SmartFarmChatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Update greeting message when language changes
+  useEffect(() => {
+    setMessages(prev => prev.map(msg =>
+      msg.isGreeting ? { ...msg, content: t("chatbot.greeting") } : msg
+    ));
+  }, [language, t]);
+
   useEffect(() => {
     const userId = getExternalUserId();
     if (userId) {
