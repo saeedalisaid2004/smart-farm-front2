@@ -171,8 +171,8 @@ const CropRecommendation = () => {
                           <TrendingUp className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground">Expected Yield Level</p>
-                          <p className={`font-bold ${getYieldStyle(yieldLevel)}`}>{yieldLevel}</p>
+                           <p className="text-xs text-muted-foreground">{t("crop.yieldLevel")}</p>
+                           <p className={`font-bold ${getYieldStyle(yieldLevel)}`} dir="auto">{yieldLevel}</p>
                         </div>
                       </div>
                     )}
